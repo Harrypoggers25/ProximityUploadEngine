@@ -2,42 +2,107 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
-    <main>
-        <section class="row" aria-labelledby="aspnetTitle">
-            <h1 id="aspnetTitle">ASP.NET</h1>
-            <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-            <p><a href="http://www.asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-        </section>
+    <style>
+        .card-header-login {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 2px solid cornflowerblue;
+        }
 
-        <div class="row">
-            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-                <h2 id="gettingStartedTitle">Getting started</h2>
-                <p>
-                    ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-                A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="librariesTitle">
-                <h2 id="librariesTitle">Get more libraries</h2>
-                <p>
-                    NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-                </p>
-            </section>
-            <section class="col-md-4" aria-labelledby="hostingTitle">
-                <h2 id="hostingTitle">Web Hosting</h2>
-                <p>
-                    You can easily find a web hosting company that offers the right mix of features and price for your applications.
-                </p>
-                <p>
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-                </p>
-            </section>
+        login-text {
+            text-align: center;
+            font-family: Verdana, sans-serif;
+            font-size: 20px;
+            font-style: oblique;
+            color: cornflowerblue;
+        }
+
+        .card {
+            max-width: 400px;
+            margin: 0 auto;
+            border: 2px solid cornflowerblue;
+        }
+
+        .form-group {
+            text-align: center;
+            padding: 10px;
+            font-style: oblique;
+        }
+
+            .form-group label {
+                display: block;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+
+        .card-body-login {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .input-group-prepend .input-group-text {
+            color: cornflowerblue;
+            background-color: transparent;
+            border: none;
+        }
+
+        .btn-custom {
+            background-color: transparent;
+            border-color: cornflowerblue;
+            color: cornflowerblue;
+        }
+    </style>
+
+    <main>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header-login">
+                            <img src="/svg/Vision-Four.svg" height="50" alt="SVG Image" />
+                        </div>
+                        <br />
+                        <login-text>LOG IN</login-text>
+                        <div class="card-body-login">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                    <asp:TextBox class="form-control" ID="username" placeholder="Username" runat="server"></asp:TextBox>
+                                </div>
+                                <asp:RequiredFieldValidator ID="rfvUsername" ControlToValidate="username" runat="server"
+                                    ErrorMessage="Username is required" ForeColor="Red" Display="Dynamic" />
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="card-body-login">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-key"></i>
+                                        </span>
+                                    </div>
+                                    <asp:TextBox class="form-control" ID="password" placeholder="Password" runat="server"></asp:TextBox>
+                                </div>
+                                <asp:RequiredFieldValidator ID="rfvpassword" ControlToValidate="password" runat="server"
+                                    ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic" />
+                            </div>
+                            <br />
+                            <asp:Button ID="btnLogin" runat="server" Text="Login" CssClass="btn btn-custom rounded-pill mx-auto" />
+                            <br />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </main>
 
