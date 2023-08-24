@@ -28,16 +28,16 @@ namespace ProximityUploadEngine
                 }
             }
         }
-        public Agency GetAgency(string email)
+        public Agency GetAgency(int id)
         {
             var agency = new Agency();
             using (var conn = new NpgsqlConnection(connectionString))
             {
                 conn.Open();
 
-                using (var cmd = new NpgsqlCommand("SELECT * FROM tb_agency WHERE email = @email", conn))
+                using (var cmd = new NpgsqlCommand("SELECT * FROM tb_agency WHERE id = @id", conn))
                 {
-                    cmd.Parameters.AddWithValue("email", email);
+                    cmd.Parameters.AddWithValue("id", id);
 
                     using (var reader = cmd.ExecuteReader())
                     {

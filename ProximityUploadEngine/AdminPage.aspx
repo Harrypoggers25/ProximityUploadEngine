@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main>
-        <table id="myTable" class="display" style="width: 100%">
+        <table id="example" class="cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -11,15 +11,29 @@
                     <th>Password</th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+            </tfoot>
         </table>
     </main>
     <script>
         $(document).ready(function () {
-            $('#myTable').DataTable({
+            new DataTable('#example', {
+                paging: false,
+                scrollCollapse: true,
+                scrollY: '60vh',
                 ajax: {
-                    url: 'AgenciesHandler.ashx',
-                    dataSrc: ''
+                    url: 'AdminPage.aspx/GetAllAgency', // URL to fetch data
+                    type: 'POST', // Use POST method
+                    contentType: 'application/json', // Set content type
+                    dataSrc: function (response) {
+                        return JSON.parse(response.d); // Parse the data
+                    }
                 },
                 columns: [
                     { data: 'id' },

@@ -6,6 +6,12 @@ using System.Web.UI.WebControls;
 using System.Collections.Generic;
 using System.Web.Services;
 using System.Runtime.InteropServices;
+using System.Linq;
+using System.Reflection;
+using System.Web.Script.Serialization;
+using System.Data.Common;
+using Newtonsoft.Json;
+using System.Web.Script.Services;
 
 namespace ProximityUploadEngine
 {
@@ -14,63 +20,12 @@ namespace ProximityUploadEngine
         protected void Page_Load(object sender, EventArgs e)
         {
         }
-        [Serializable]
-        public class TableData
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-        }
-
         [WebMethod]
-        public static List<TableData> GetTableData()
+        public static string GetAllAgency()
         {
-            // Simulate fetching data from a data source
-            var data = new List<TableData>
-        {
-            new TableData { ID = 1, Name = "John Doe", Email = "john@example.com" },
-            new TableData { ID = 2, Name = "Jane Smith", Email = "jane@example.com" },
-            // Add more data here...
-        };
-
-            return data;
-        }
-    }
-    public class ApplicationDbContext : DbContext
-    {
-        public DbSet<Agency> Agencies { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("YourConnectionStringHere");
-        }
-    }
-    public class AgencyRepository
-    {
-        public List<Agency> GetAgencies()
-        {
-            using (var context = new ApplicationDbContext())
-            {
-                return context.Agencies.ToList();
-            }
-        }
-    }
-    [RoutePrefix("api/agencies")]
-    public class AgenciesController : ApiController
-    {
-        private readonly AgencyRepository _agencyRepository;
-
-        public AgenciesController()
-        {
-            _agencyRepository = new AgencyRepository();
-        }
-
-        [HttpGet]
-        [Route("")]
-        public IHttpActionResult Get()
-        {
-            var agencies = _agencyRepository.GetAgencies();
-            return Ok(agencies);
+            var db = new AgencyData();
+            List<Agency> agencies = db.GetAllAgency();
+            return JsonConvert.SerializeObject(agencies);
         }
     }
 }
