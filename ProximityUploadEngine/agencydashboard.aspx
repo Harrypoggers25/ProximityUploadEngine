@@ -1,12 +1,13 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="agencydashboard.aspx.cs" Inherits="ProximityUploadEngine.agencydashboard" %>
+﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
         .user-header {
-            font-family: 'roboto' sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-weight: bold;
             font-size: 30px;
+            margin-bottom: 20px; /* Add margin for better spacing */
         }
 
         .uploader-container {
@@ -18,8 +19,7 @@
 
         .custom-card {
             width: 50%;
-            margin-top: 5vh;
-            margin-left: 300px;
+            margin: 5vh auto; /* Center the card horizontally and adjust top margin */
             display: flex;
             flex-direction: column;
             border-radius: 10px;
@@ -28,11 +28,11 @@
             background-color: transparent;
         }
 
-
         .uploader {
             display: flex;
             align-items: center;
             width: 100%;
+            margin-top: 20px; /* Add margin for better spacing */
         }
 
         .upload-box,
@@ -46,14 +46,17 @@
             border: 2px dashed royalblue;
             border-radius: 10px;
             margin: 0 5px;
+            cursor: pointer; /* Add cursor pointer for better indication */
+            transition: opacity 0.3s ease; /* Add transition effect */
         }
 
             .upload-box:hover {
-                opacity: 0.5;
+                opacity: 0.7; /* Adjust opacity on hover */
             }
 
         #videoPreviewBox {
             display: none;
+            margin-top: 20px; /* Add margin for better spacing */
         }
 
         #videoPreview {
@@ -81,13 +84,12 @@
             width: 48%;
             border: 2px dashed royalblue;
             border-radius: 10px;
+            cursor: pointer;
         }
 
-
-
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload {
-            color: white;
-        }
+            #submitBtn:hover, #resetBtn:hover {
+                opacity: 0.7;
+            }
 
         .error-message {
             display: none;
@@ -100,6 +102,7 @@
             padding: 10px;
             border-radius: 5px;
             text-align: center;
+            z-index: 1000;
         }
 
         .success-message {
@@ -108,6 +111,7 @@
             margin-top: 10px;
             font-size: 16px;
             color: green;
+            z-index: 1000;
         }
 
         .success-icon {
@@ -122,23 +126,13 @@
                     <div class="card px-3 py-2">
                         <div class="card-body">
                             <h2 class="fs-4">Hi,
-                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label>
-                            </h2>
+                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label></h2>
                             <span id="currentTime"><%: DateTime.Now.TimeOfDay.Hours %>:<%: DateTime.Now.TimeOfDay.Minutes %> AM <%: DateTime.Now.Date.Day %>/<%: DateTime.Now.Date.Month %>/<%: DateTime.Now.Date.Year %></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="option-card">
-            <label class="user-header">Choose an Option</label>
-            <button id="option1Btn" class="option-button" onclick="chooseOption('Option 1')">Option 1</button>
-            <button id="option2Btn" class="option-button" onclick="chooseOption('Option 2')">Option 2</button>
-            <button id="option3Btn" class="option-button" onclick="chooseOption('Option 3')">Option 3</button>
-            <p>
-                <asp:Label ID="lblChosenOption" runat="server" Text=""></asp:Label></p>
-        </div>
-
         <div class="custom-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
@@ -316,16 +310,15 @@
                     videoPreview.currentTime = 0;
                     videoPreview.src = "";
                     resetVideoPreview();
-                    successMessage.style.display = 'none'; // Hide the success message
-                }, 1000); // Adjust the delay time (in milliseconds) as needed
-
-
+                    successMessage.style.display = 'none';
+                    location.reload();
+                }, 1000);
             } else {
-                // Display error message
                 errorMessage.style.display = 'block';
             }
         }
+
+
     </script>
 
 </asp:Content>
-
