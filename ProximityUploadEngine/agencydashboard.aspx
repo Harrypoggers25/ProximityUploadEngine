@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
+﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="agencydashboard.aspx.cs" Inherits="ProximityUploadEngine.agencydashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -122,13 +122,23 @@
                     <div class="card px-3 py-2">
                         <div class="card-body">
                             <h2 class="fs-4">Hi,
-                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label></h2>
+                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label>
+                            </h2>
                             <span id="currentTime"><%: DateTime.Now.TimeOfDay.Hours %>:<%: DateTime.Now.TimeOfDay.Minutes %> AM <%: DateTime.Now.Date.Day %>/<%: DateTime.Now.Date.Month %>/<%: DateTime.Now.Date.Year %></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="option-card">
+            <label class="user-header">Choose an Option</label>
+            <button id="option1Btn" class="option-button" onclick="chooseOption('Option 1')">Option 1</button>
+            <button id="option2Btn" class="option-button" onclick="chooseOption('Option 2')">Option 2</button>
+            <button id="option3Btn" class="option-button" onclick="chooseOption('Option 3')">Option 3</button>
+            <p>
+                <asp:Label ID="lblChosenOption" runat="server" Text=""></asp:Label></p>
+        </div>
+
         <div class="custom-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
@@ -318,3 +328,4 @@
     </script>
 
 </asp:Content>
+
