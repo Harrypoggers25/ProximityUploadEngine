@@ -4,6 +4,161 @@
 
 <html lang="en">
 <head runat="server">
+    <style>
+        .body-content {
+            padding-left: 60px !important;
+            transition: filter 0.3s ease; /* Add smooth transition effect */
+            position: relative;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transition: background-color 0.3s ease;
+            z-index: 1;
+        }
+        /*navbar*/
+        .navbar {
+            background: linear-gradient(135deg, #000428, #004e92);
+            z-index: 2;
+        }
+
+        #pnl_hdrProfile span {
+            color: aliceblue;
+            font-family: 'Roboto', sans-serif;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /*sidebar*/
+        .sidebar {
+            width: 65px;
+            background-color: #d3d3d3;
+            position: absolute;
+            height: 100%;
+            overflow: hidden;
+            transition: width 0.3s;
+            z-index: 2;
+        }
+
+            .sidebar:not(:hover) span {
+                color: transparent;
+            }
+
+            .sidebar:hover {
+                width: 200px;
+            }
+
+            .sidebar a {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0px 20px;
+                text-decoration: none;
+            }
+
+
+
+                .sidebar a span {
+                    margin-left: 12px;
+                    color: #222;
+                    font-weight: bold;
+                }
+
+                .sidebar a i {
+                    color: #222;
+                    font-size: 20px;
+                }
+
+                .sidebar a:hover span,
+                .sidebar a:hover i {
+                    color: #004e92;
+                }
+
+                .sidebar a.text-nowrap:hover span,
+                .sidebar a.text-nowrap:hover i {
+                    color: #222;
+                }
+
+        .toggle-switch {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            outline: dimgrey solid 3px;
+            border-radius: 50%;
+            background-color: white;
+            cursor: pointer;
+        }
+
+            .toggle-switch * {
+                position: absolute;
+            }
+
+        .fa-moon {
+            color: white;
+        }
+
+        .fa-sun {
+            color: orange;
+        }
+
+        .dark-mode {
+            background-color: #212434;
+        }
+
+        .dark-mode {
+            transition: background-color 0.3s ease;
+        }
+
+            .dark-mode .card {
+                background-color: #2b2f44;
+                color: white;
+            }
+
+            .dark-mode .card-header {
+                background-color: #2b2f44;
+            }
+
+            .dark-mode .sidebar {
+                background: linear-gradient(135deg,#000428, #004e92);
+            }
+
+            .dark-mode .fa-bars, .dark-mode .fa-box, .dark-mode .fa-cog, .dark-mode .fa-home, .dark-mode .fa-sign-out {
+                color: white;
+            }
+
+            .dark-mode .sidebar-text {
+                color: white;
+            }
+
+
+            .dark-mode .sidebar a:hover span,
+            .dark-mode .sidebar a:hover i {
+                color: #9E9FA5;
+            }
+
+            .dark-mode .sidebar a.text-nowrap:hover span,
+            .dark-mode .sidebar a.text-nowrap:hover i {
+                color: white;
+            }
+
+            .dark-mode .footervf {
+                background-image: linear-gradient(to bottom, #1450A3, #4682A9);
+                -webkit-background-clip: text;
+                color: transparent;
+            }
+    </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %> - My ASP.NET Application</title>
@@ -54,6 +209,35 @@
                 </div>
             </div>
         </nav>
+        <asp:Panel ID="pnl_mysidebar" runat="server" class="sidebar">
+            <a runat="server" class="text-nowrap ">
+                <i class="fas fa-bars"></i>
+                <span class="sidebar-text">Main Menu</span>
+            </a>
+            <hr />
+            <a runat="server" href="userdashboard" class="boxed-link">
+                <i class="fas fa-home"></i>
+                <span class="sidebar-text">Home</span>
+            </a>
+            <br />
+            <a runat="server" href="setting" class="boxed-link">
+                <i class="fas fa-cog"></i>
+                <span class="sidebar-text">Settings</span>
+            </a>
+            <br>
+            <a runat="server" href="UserLogin" class="boxed-link">
+                <i class="fas fa-sign-out"></i>
+                <span class="sidebar-text">LogOut</span>
+            </a>
+            <br />
+            <br />
+            <div class="toggle-switch">
+                <i class="fa-solid fa-sun"></i>
+                <i class="fa-solid fa-moon"></i>
+            </div>
+        </asp:Panel>
+
+        <div id="overlay"></div>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
@@ -66,6 +250,42 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
+    <script>
+        $(document).ready(function () {
+            const toggleSwitch = $('.toggle-switch');
+            var isToggled = false;
+
+            $(".fa-sun").hide();
+            $(".fa-moon").hide();
+
+            $(".fa-sun").show();
+
+            toggleSwitch.click(function () {
+                isToggled = !isToggled;
+                if (isToggled) {
+                    $(".toggle-switch").css({ "background-color": "#282828" });
+                    $(".fa-sun").hide();
+                    $(".fa-moon").show();
+                }
+                else {
+                    $(".toggle-switch").css({ "background-color": "white" });
+                    $(".fa-moon").hide();
+                    $(".fa-sun").show();
+                }
+
+                const element = document.body;
+                element.classList.toggle("dark-mode");
+            });
+            $("#<%= pnl_mysidebar.ClientID %>").hover(
+                function () {
+                    $("#overlay").css("background-color", "rgba(0,0,0,0.5)");
+                },
+                function () {
+                    $("#overlay").css("background-color", "rgba(0,0,0,0)");
+                }
+            );
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">

@@ -104,7 +104,7 @@ namespace ProximityUploadEngine
                 }
             }
         }
-        public void DeleteAgency(Agency agency)
+        public void DeleteAgency(int id)
         {
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -112,7 +112,7 @@ namespace ProximityUploadEngine
 
                 using (var cmd = new NpgsqlCommand("DELETE FROM tb_agency WHERE id = @id", conn))
                 {
-                    cmd.Parameters.AddWithValue("id", agency.id);
+                    cmd.Parameters.AddWithValue("id", id);
 
                     cmd.ExecuteNonQuery();
                 }

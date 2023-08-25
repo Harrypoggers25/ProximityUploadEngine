@@ -19,6 +19,8 @@ namespace ProximityUploadEngine
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            var master = (SiteMaster)this.Master;
+
         }
         [WebMethod]
         public static string GetAllAgency()
@@ -26,6 +28,12 @@ namespace ProximityUploadEngine
             var db = new AgencyData();
             List<Agency> agencies = db.GetAllAgency();
             return JsonConvert.SerializeObject(agencies);
+        }
+        [WebMethod]
+        public static void DeleteAgency(int id)
+        {
+            var db = new AgencyData();
+            db.DeleteAgency(id);
         }
     }
 }
