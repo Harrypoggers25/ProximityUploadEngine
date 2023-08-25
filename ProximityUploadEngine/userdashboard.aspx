@@ -3,11 +3,17 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
+        .user-header {
+            font-family: 'roboto' sans-serif;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
         .uploader-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 60vh;
+            height: 55vh;
         }
 
         .custom-card {
@@ -16,7 +22,7 @@
             display: flex;
             flex-direction: column;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             padding: 20px;
             background-color: transparent;
         }
@@ -42,7 +48,7 @@
         }
 
             .upload-box:hover {
-                opacity: 0.7;
+                opacity: 0.5;
             }
 
         #videoPreviewBox {
@@ -62,8 +68,24 @@
         }
 
         #submitBtn {
-            width: 100%;
+            background-color: transparent;
+            margin-left: 400px;
+            width: 20%;
             margin-top: 20px;
+            border: 2px dashed royalblue;
+            border-radius: 10px;
+        }
+
+        #resetBtn {
+            background-color: transparent;
+            width: 20%;
+            margin-top: 20px;
+            border: 2px dashed royalblue;
+            border-radius: 10px;
+        }
+
+        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header {
+            color: white;
         }
     </style>
     <main aria-labelledby="title">
@@ -80,15 +102,18 @@
                 </div>
             </div>
         </div>
+
+        <center>
+            <label class="user-header">UPLOAD YOUR AD</label></center>
         <div class="uploader-container">
             <div class="custom-card">
                 <div class="uploader">
                     <div class="upload-box" onclick="document.getElementById('videoFile').click()">
-                        <span>Choose File</span>
+                        <span class="uploadertext">Choose File</span>
                     </div>
                     <div class="border-divider"></div>
                     <div class="upload-box" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                        <span>Drag your video</span>
+                        <span class="uploadertext">Drag your video</span>
                     </div>
                 </div>
                 <div class="video-preview-box" id="videoPreviewBox">
@@ -96,14 +121,16 @@
                         Your browser does not support the video tag.
                     </video>
                 </div>
+                <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">Change Ads</button>
                 <button id="submitBtn" onclick="submitVideo()" disabled>Submit</button>
+
             </div>
         </div>
         <input id="videoFile" type="file" accept="video/*" onchange="handleVideoFile()" style="display: none;">
     </main>
 
-    <script>
 
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             function updateTime() {
                 const currentTimeElement = document.getElementById("currentTime");
@@ -155,8 +182,9 @@
 
         function handleVideoPreview() {
             const videoPreview = document.getElementById('videoPreview');
-            const videoPreviewBox = document.querySelector('.video-preview-box');
+            const videoPreviewBox = document.getElementById('videoPreviewBox');
             const submitBtn = document.getElementById('submitBtn');
+            const resetBtn = document.getElementById('resetBtn');
 
             if (selectedVideo) {
                 if (selectedVideo.type.indexOf('video/') !== 0) {
@@ -169,22 +197,35 @@
                 videoPreview.src = URL.createObjectURL(selectedVideo);
                 videoPreview.load();
                 submitBtn.disabled = false;
+                resetBtn.style.display = 'block';
 
                 // Hide upload boxes
                 document.querySelectorAll('.upload-box').forEach(box => {
                     box.style.display = 'none';
                 });
             } else {
-
-                videoPreviewBox.style.display = 'none';
-                videoPreview.src = '';
-                submitBtn.disabled = true;
-
-                // Show upload boxes
-                document.querySelectorAll('.upload-box').forEach(box => {
-                    box.style.display = 'flex';
-                });
+                resetVideoPreview();
             }
+        }
+
+        function resetVideoPreview() {
+            const videoPreview = document.getElementById('videoPreview');
+            const videoPreviewBox = document.getElementById('videoPreviewBox');
+            const submitBtn = document.getElementById('submitBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            videoPreview.pause();
+            videoPreview.currentTime = 0;
+            videoPreviewBox.style.display = 'none';
+            submitBtn.disabled = true;
+            resetBtn.style.display = 'none';
+
+            // Show upload boxes
+            document.querySelectorAll('.upload-box').forEach(box => {
+                box.style.display = 'flex';
+            });
+
+            selectedVideo = null;
         }
 
         function submitVideo() {
@@ -193,6 +234,6 @@
             }
         }
 
-
     </script>
+
 </asp:Content>
