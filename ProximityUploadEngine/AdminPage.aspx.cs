@@ -23,11 +23,29 @@ namespace ProximityUploadEngine
 
         }
         [WebMethod]
+        public static void createAgency(Agency agency)
+        {
+            var db = new AgencyData();
+            db.CreateAgency(agency);
+        }
+        [WebMethod]
         public static string GetAllAgency()
         {
             var db = new AgencyData();
             List<Agency> agencies = db.GetAllAgency();
             return JsonConvert.SerializeObject(agencies);
+        }
+        [WebMethod]
+        public static string getFirstEmptyId()
+        {
+            var db = new AgencyData();
+            return JsonConvert.SerializeObject(db.getFirstEmptyAgency());
+        }
+        [WebMethod]
+        public static void updateAgency(Agency agency)
+        {
+            var db = new AgencyData();
+            db.UpdateAgency(agency);
         }
         [WebMethod]
         public static void DeleteAgency(int id)
