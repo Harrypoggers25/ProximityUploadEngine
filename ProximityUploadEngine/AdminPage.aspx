@@ -2,22 +2,53 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
-        .dataTables_filter {
-            margin-bottom: 10px; /* Adjust the margin value as needed */
-            margin-right: 16px; /* Adjust the margin value as needed */
+        /*Data table*/
+        .toolbar { /*Title*/
+            font-size: 40px;
+            font-weight: 600;
+            float: left;
+            margin-bottom: 10px;
+        }
+
+        .dataTables_filter { /*Search Bar*/
+            position: absolute;
+            top: 20px;
+            right: 0;
+            margin-right: 16px;
         }
 
         .editor-delete, .editor-edit {
             cursor: pointer;
         }
 
-        #example tfoot tr:hover {
-            background-color: white !important;
+        /*Dialog box*/
+        .ui-widget-overlay {
+            background-color: black;
+        }
+
+        .ui-dialog {
+            position: fixed;
+        }
+
+        .ui-dialog-titlebar {
+            border: none;
+            background-color: transparent;
+        }
+
+        .ui-dialog-titlebar-close {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            border: none;
+        }
+
+        #dlg-agency input {
+            min-width: 300px;
         }
     </style>
     <main>
-        <h1>Admin Page</h1>
-        <table id="example" class="table table-dark table-striped table-bordered table-hover">
+        <table id="tbl-agency" class="table table-dark table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -36,14 +67,33 @@
                 </tr>
             </tfoot>
         </table>
+        <div id="dlg-agency">
+            <label for="tb-name">
+                Name:<br />
+                <input id="tb-name" name="tb-name" type="text" class="mb-3" />
+            </label>
+            <br />
+            <label for="tb-email">
+                Email:<br />
+                <input id="tb-email" name="tb-email" type="text" class="mb-3" />
+            </label>
+            <br />
+            <label for="tb-password">
+                Password:<br />
+                <input id="tb-password" name="tb-password" type="password" class="mb-3" />
+            </label>
+            <br />
+        </div>
     </main>
     <script>
         $(document).ready(function () {
-            const dataTable = new DataTable('#example', {
+            // datatable initialization
+            const dataTable = new DataTable('#tbl-agency', {
                 paging: false,
                 info: false,
                 scrollCollapse: true,
                 scrollY: '60vh',
+                dom: '<"toolbar">frtip',
                 ajax: {
                     url: 'AdminPage.aspx/GetAllAgency',
                     type: 'POST',
@@ -74,7 +124,7 @@
             function refreshTable() {
                 $.ajax({
                     type: 'POST',
-                    url: 'AdminPage.aspx/GetAllAgency', // Replace with your server-side method to fetch updated data
+                    url: 'AdminPage.aspx/GetAllAgency',
                     contentType: 'application/json',
                     success: function (response) {
                         var updatedData = JSON.parse(response.d);
@@ -85,13 +135,14 @@
                     }
                 });
             }
+            $('#tbl-agency_wrapper div.toolbar').html('Admin Page');
 
-            // Edit record
+            // edit row event
             dataTable.on('click', 'td.editor-edit', function (e) {
                 e.preventDefault();
             });
 
-            // Delete a record
+            // delete row event
             dataTable.on('click', 'td.editor-delete', function (e) {
                 const row = $(this).closest('tr'); // Get the closest row
                 const rowData = dataTable.row(row).data();
@@ -111,6 +162,72 @@
                     }
                 });
                 e.preventDefault();
+            });
+
+            // dialog initialization (Add row event)
+            var currentId;
+            $("#dlg-agency").dialog({
+                autoOpen: false,
+                modal: true,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                width: 500,
+                buttons: [
+                    {
+                        text: "Confirm",
+                        class: "btn btn-primary",
+                        click: function () {
+                            var agency = {
+                                id: currentId,
+                                name: $("#tb-name").val(),
+                                email: $("#tb-email").val(),
+                                password: $("#tb-password").val()
+                            };
+                            if (agency.name === "" || agency.email === "" || agency.password === "") {
+                                alert("Please fill in all fields.");
+                            } else {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'AdminPage.aspx/createAgency',
+                                    data: JSON.stringify({ agency: agency }),
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function () {
+                                        refreshTable();
+                                        $("#tb-name").val("");
+                                        $("#tb-email").val("");
+                                        $("#tb-password").val("");
+                                        $("#dlg-agency").dialog("close");
+                                    },
+                                    error: function (error) {
+                                        console.log("error: unable to add new row");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                ],
+                open: function (event, ui) {
+                    $('.ui-dialog-titlebar-close').html('<i class="fa fa-times" aria-hidden="true"></i>');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'AdminPage.aspx/getFirstEmptyId',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (response) {
+                            currentId = JSON.parse(response.d);
+                            $("#dlg-agency").dialog("option", "title", "Add New Row (ID: " + currentId + ")");
+                        },
+                        error: function (error) {
+                            console.log("error: unable to get row id");
+                        }
+                    });
+                }
+            });
+            $("#btnTbAddRow").click(function (e) {
+                e.preventDefault();
+                $("#dlg-agency").dialog("open");
             });
         });
     </script>

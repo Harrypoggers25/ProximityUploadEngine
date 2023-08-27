@@ -74,7 +74,7 @@ namespace ProximityUploadEngine
                     {
                         var agency = new Agency
                         {
-                            id = Convert.ToInt32(reader["id"].ToString()),
+                            id = Convert.ToInt32(reader["id"]),
                             name = reader["name"].ToString(),
                             email = reader["email"].ToString(),
                             password = reader["password"].ToString(),
@@ -86,6 +86,33 @@ namespace ProximityUploadEngine
             }
 
             return users;
+        }
+        public int getFirstEmptyAgency()
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("SELECT id FROM tb_agency ORDER BY id ASC;", conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    int counter = 0; 
+
+                    while (reader.Read())
+                    {
+                        if (!reader.IsDBNull(0) && counter == reader.GetInt32(0))
+                        {
+                            counter++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    return counter;
+                }
+            }
         }
         public void UpdateAgency(Agency agency)
         {

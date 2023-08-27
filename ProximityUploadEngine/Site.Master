@@ -10,17 +10,6 @@
             transition: filter 0.3s ease; /* Add smooth transition effect */
             position: relative;
         }
-
-        #overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            transition: background-color 0.3s ease;
-            z-index: 1;
-        }
         /*navbar*/
         .navbar {
             background: linear-gradient(135deg, #000428, #004e92);
@@ -39,7 +28,7 @@
             width: 65px;
             background-color: #d3d3d3;
             position: absolute;
-            height: 100%;
+            height: 100vh;
             overflow: hidden;
             transition: width 0.3s;
             z-index: 2;
@@ -170,6 +159,8 @@
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" integrity="sha512-ELV+xyi8IhEApPS/pSj66+Jiw+sOT1Mqkzlh8ExXihe4zfqbWkxPRi8wptXIO9g73FSlhmquFlUOuMSoXz5IRw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <form runat="server">
@@ -193,20 +184,17 @@
 
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
             <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Application name</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
-                </div>
+                <a class="navbar-brand" runat="server">
+                    <img src="https://www.visionfour.com/wp-content/uploads/logo-visionfour.png" style="height: 25px;" />
+                </a>
+                <asp:Panel ID="pnl_hdrProfile" runat="server">
+                    <span style="display: flex; align-items: center;">
+                        <asp:Image ID="img_profilePicture" runat="server" ImageUrl="/assets/images/user.png" Height="30px" />
+                        <asp:Label ID="lbl_username" runat="server" Text="" Style="margin-left: 10px;"></asp:Label>
+                    </span>
+                </asp:Panel>
             </div>
         </nav>
         <asp:Panel ID="pnl_mysidebar" runat="server" class="sidebar">
@@ -237,13 +225,11 @@
             </div>
         </asp:Panel>
 
-        <div id="overlay"></div>
         <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
             <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+            <footer class="footervf">
+                <p>&copy; <%: DateTime.Now.Year %> - Vision Four Application</p>
             </footer>
         </div>
     </form>
@@ -278,16 +264,17 @@
             });
             $("#<%= pnl_mysidebar.ClientID %>").hover(
                 function () {
-                    $("#overlay").css("background-color", "rgba(0,0,0,0.5)");
+                    $("#<%= pnl_mysidebar.ClientID %>, .navbar").dimBackground();
                 },
                 function () {
-                    $("#overlay").css("background-color", "rgba(0,0,0,0)");
+                    $.undim();
                 }
             );
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://andywer.github.io/jquery-dim-background/jquery.dim-background.min.js"></script>
 </body>
 </html>
