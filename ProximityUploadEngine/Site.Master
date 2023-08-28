@@ -6,7 +6,7 @@
 <head runat="server">
     <style>
         .body-content {
-            padding-left: 70px !important;
+            padding: 0 70px !important;
             transition: filter 0.3s ease; /* Add smooth transition effect */
             position: relative;
         }
@@ -213,7 +213,7 @@
                 <span class="sidebar-text">Settings</span>
             </a>
             <br>
-            <a runat="server" href="UserLogin" class="boxed-link">
+            <a runat="server" href="Default" class="boxed-link">
                 <i class="fas fa-sign-out"></i>
                 <span class="sidebar-text">LogOut</span>
             </a>
