@@ -3,117 +3,147 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-        .user-header {
-            font-family: 'roboto' sans-serif;
-            font-weight: bold;
-            font-size: 30px;
+    .user-header {
+        font-family: 'roboto' sans-serif;
+        font-weight: bold;
+        font-size: 30px;
+    }
+
+    .uploader-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 55vh;
+    }
+
+    .custom-card {
+        width: 50%;
+        margin-top: 5vh;
+        margin-left: 300px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        background-color: transparent;
+    }
+
+
+    .uploader {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .upload-box,
+    .video-preview-box {
+        flex: 1;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 2px dashed royalblue;
+        border-radius: 10px;
+        margin: 0 5px;
+    }
+
+        .upload-box:hover {
+            opacity: 0.5;
         }
 
-        .uploader-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 55vh;
-        }
+    #videoPreviewBox {
+        display: none;
+    }
 
-        .custom-card {
-            width: 50%;
-            margin-top: 5vh;
-            margin-left: 300px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            padding: 20px;
+    #videoPreview {
+        width: 95%;
+        height: 95%;
+        object-fit: cover;
+    }
+
+    .border-divider {
+        width: 2px;
+        height: 100%;
+        background-color: gray;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 50%;
+        margin: 20px auto;
+    }
+
+    #submitBtn, #resetBtn {
+        background-color: steelblue;
+        border-color: royalblue;
+        width: 48%;
+        border-radius: 10px;
+    }
+
+
+
+    .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
+    .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
+        color: white;
+    }
+
+    .error-message {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 0, 0, 0.8);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .success-message {
+        display: none;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 16px;
+        color: green;
+    }
+
+    .success-icon {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    .border-divider {
+        width: 2px;
+        height: 100%;
+        background-color: gray;
+        margin: 0 10px;
+    }
+
+    .option-dropdown {
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    #optionSelector {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+        #optionSelector option {
+            padding: 5px;
+            font-size: 14px;
             background-color: transparent;
+            color: black;
         }
 
-
-        .uploader {
-            display: flex;
-            align-items: center;
-            width: 100%;
-        }
-
-        .upload-box,
-        .video-preview-box {
-            flex: 1;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border: 2px dashed royalblue;
-            border-radius: 10px;
-            margin: 0 5px;
-        }
-
-            .upload-box:hover {
-                opacity: 0.5;
-            }
-
-        #videoPreviewBox {
-            display: none;
-        }
-
-        #videoPreview {
-            width: 95%;
-            height: 95%;
-            object-fit: cover;
-        }
-
-        .border-divider {
-            width: 2px;
-            height: 100%;
-            background-color: gray;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 50%;
-            margin: 20px auto;
-        }
-
-        #submitBtn, #resetBtn {
-            background-color: transparent;
-            width: 48%;
-            border: 2px dashed royalblue;
-            border-radius: 10px;
-        }
-
-
-
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload {
-            color: white;
-        }
-
-        .error-message {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .success-message {
-            display: none;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 16px;
-            color: green;
-        }
-
-        .success-icon {
-            font-size: 20px;
-            margin-right: 5px;
-        }
     </style>
     <main aria-labelledby="title">
         <div class="container">
@@ -130,19 +160,23 @@
                 </div>
             </div>
         </div>
-        <div class="option-card">
-            <label class="user-header">Choose an Option</label>
-            <button id="option1Btn" class="option-button" onclick="chooseOption('Option 1')">Option 1</button>
-            <button id="option2Btn" class="option-button" onclick="chooseOption('Option 2')">Option 2</button>
-            <button id="option3Btn" class="option-button" onclick="chooseOption('Option 3')">Option 3</button>
-            <p>
-                <asp:Label ID="lblChosenOption" runat="server" Text=""></asp:Label></p>
-        </div>
+
 
         <div class="custom-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
             </center>
+            <div class="border-divider"></div>
+            <div class="option-dropdown">
+                <select id="optionSelector">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <br />
             <div class="uploader">
                 <div class="upload-box" onclick="document.getElementById('videoFile').click()">
                     <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 50px;"></i>
@@ -202,6 +236,12 @@
                 const currentDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
                 currentTimeElement.textContent += ` ${currentDate}`;
             }
+              const optionSelector = document.getElementById('optionSelector');
+
+    optionSelector.addEventListener('change', function() {
+        // No need to update the selectedOptionText span
+    });
+
 
             updateTime();
             setInterval(updateTime, 1000);
@@ -311,20 +351,19 @@
                 });
 
                 // Clear background music and reset video after a delay
-                setTimeout(function () {
-                    videoPreview.pause();
-                    videoPreview.currentTime = 0;
-                    videoPreview.src = "";
-                    resetVideoPreview();
-                    successMessage.style.display = 'none'; // Hide the success message
-                }, 1000); // Adjust the delay time (in milliseconds) as needed
-
-
-            } else {
-                // Display error message
-                errorMessage.style.display = 'block';
-            }
-        }
+                 setTimeout(function () {
+            videoPreview.pause();
+            videoPreview.currentTime = 0;
+            videoPreview.src = "";
+            resetVideoPreview();
+            successMessage.style.display = 'none'; // Hide the success message
+            location.reload(); // Refresh the page after 10 seconds
+        }, 3000); // 10 seconds in milliseconds
+    } else {
+        // Display error message
+        errorMessage.style.display = 'block';
+    }
+}
     </script>
 
 </asp:Content>
