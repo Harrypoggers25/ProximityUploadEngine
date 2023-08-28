@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
+﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="agencydashboard.aspx.cs" Inherits="ProximityUploadEngine.agencydashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -38,7 +38,7 @@
         .upload-box,
         .video-preview-box {
             flex: 1;
-            height: 200px;
+            height: 250px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -77,15 +77,16 @@
         }
 
         #submitBtn, #resetBtn {
-            background-color: transparent;
+            background-color: steelblue;
+            border-color: royalblue;
             width: 48%;
-            border: 2px dashed royalblue;
             border-radius: 10px;
         }
 
 
 
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload {
+        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
+        .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
             color: white;
         }
 
@@ -141,77 +142,57 @@
                     <div class="card px-3 py-2">
                         <div class="card-body">
                             <h2 class="fs-4">Hi,
-                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label></h2>
+                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label>
+                            </h2>
                             <span id="currentTime"><%: DateTime.Now.TimeOfDay.Hours %>:<%: DateTime.Now.TimeOfDay.Minutes %> AM <%: DateTime.Now.Date.Day %>/<%: DateTime.Now.Date.Month %>/<%: DateTime.Now.Date.Year %></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
         <div class="custom-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
-            </center>
-            <div class="uploader">
-                <div class="upload-box" onclick="document.getElementById('videoFile').click()">
-                    <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 50px;"></i>
-                    <span class="uploadertext">Upload Video</span>
-                </div>
-                <div class="border-divider"></div>
-                <div class="upload-box" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                    <i class="fa fa-video-camera" aria-hidden="true" style="font-size: 50px;"></i>
-                    <span class="uploadertext">Drag video</span>
-                </div>
-            </div>
-
-            <!-- Error Message -->
-            <div id="errorMessage" class="error-message">
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                Please select a valid video file.
-            </div>
-
-            <!-- Success Message -->
-            <div class="success-message" id="successMessage">
-                <i class="fa fa-check-circle success-icon" aria-hidden="true"></i>
-                Video submitted successfully!
-            </div>
-
-
-            <div class="video-preview-box" id="videoPreviewBox">
-                <video id="videoPreview" controls autoplay loop muted>
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="button-container">
-                <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">
-                    <i class="fa fa-chevron-circle-left" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Change Ads
-                </button>
-                <button id="submitBtn" onclick="submitVideo()" disabled>
-                    <i class="fa fa-upload" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Submit
-                </button>
-
-        <center>
-            <label class="user-header">UPLOAD YOUR AD</label></center>
-        <div class="uploader-container">
-            <div class="custom-card">
                 <div class="uploader">
                     <div class="upload-box" onclick="document.getElementById('videoFile').click()">
-                        <span class="uploadertext">Choose File</span>
+                        <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 50px;"></i>
+                        <span class="uploadertext">Upload Video</span>
                     </div>
                     <div class="border-divider"></div>
                     <div class="upload-box" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                        <span class="uploadertext">Drag your video</span>
+                        <i class="fa fa-video-camera" aria-hidden="true" style="font-size: 50px;"></i>
+                        <span class="uploadertext">Drag video</span>
                     </div>
                 </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message">
+                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                    Please select a valid video file.
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <i class="fa fa-check-circle success-icon" aria-hidden="true"></i>
+                    Video submitted successfully!
+                </div>
+
+
                 <div class="video-preview-box" id="videoPreviewBox">
                     <video id="videoPreview" controls autoplay loop muted>
                         Your browser does not support the video tag.
                     </video>
                 </div>
-                <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">Change Ads</button>
-                <button id="submitBtn" onclick="submitVideo()" disabled>Submit</button>
-
-            </div>
+                <div class="button-container">
+                    <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Change Ads
+                    </button>
+                    <button id="submitBtn" onclick="submitVideo()" disabled>
+                        <i class="fa fa-upload" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Submit
+                    </button>
+                </div>
         </div>
         <input id="videoFile" type="file" accept="video/*" onchange="handleVideoFile()" style="display: none;">
     </main>
@@ -233,7 +214,6 @@
                 const currentDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
                 currentTimeElement.textContent += ` ${currentDate}`;
             }
-
             updateTime();
             setInterval(updateTime, 1000);
         });
@@ -377,3 +357,4 @@
     </script>
 
 </asp:Content>
+
