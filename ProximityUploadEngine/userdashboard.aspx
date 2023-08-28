@@ -113,6 +113,25 @@
         .success-icon {
             font-size: 20px;
             margin-right: 5px;
+        #submitBtn {
+            background-color: transparent;
+            margin-left: 400px;
+            width: 20%;
+            margin-top: 20px;
+            border: 2px dashed royalblue;
+            border-radius: 10px;
+        }
+
+        #resetBtn {
+            background-color: transparent;
+            width: 20%;
+            margin-top: 20px;
+            border: 2px dashed royalblue;
+            border-radius: 10px;
+        }
+
+        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header {
+            color: white;
         }
     </style>
     <main aria-labelledby="title">
@@ -170,6 +189,28 @@
                 <button id="submitBtn" onclick="submitVideo()" disabled>
                     <i class="fa fa-upload" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Submit
                 </button>
+
+        <center>
+            <label class="user-header">UPLOAD YOUR AD</label></center>
+        <div class="uploader-container">
+            <div class="custom-card">
+                <div class="uploader">
+                    <div class="upload-box" onclick="document.getElementById('videoFile').click()">
+                        <span class="uploadertext">Choose File</span>
+                    </div>
+                    <div class="border-divider"></div>
+                    <div class="upload-box" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <span class="uploadertext">Drag your video</span>
+                    </div>
+                </div>
+                <div class="video-preview-box" id="videoPreviewBox">
+                    <video id="videoPreview" controls autoplay loop muted>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">Change Ads</button>
+                <button id="submitBtn" onclick="submitVideo()" disabled>Submit</button>
+
             </div>
         </div>
         <input id="videoFile" type="file" accept="video/*" onchange="handleVideoFile()" style="display: none;">
@@ -232,6 +273,7 @@
             const submitBtn = document.getElementById('submitBtn');
             const resetBtn = document.getElementById('resetBtn');
             const errorMessage = document.getElementById('errorMessage');
+            const resetBtn = document.getElementById('resetBtn');
 
             if (selectedVideo) {
                 if (selectedVideo.type.indexOf('video/') !== 0) {
@@ -255,6 +297,15 @@
                 resetVideoPreview();
             }
         }
+                resetVideoPreview();
+            }
+        }
+
+        function resetVideoPreview() {
+            const videoPreview = document.getElementById('videoPreview');
+            const videoPreviewBox = document.getElementById('videoPreviewBox');
+            const submitBtn = document.getElementById('submitBtn');
+            const resetBtn = document.getElementById('resetBtn');
 
         function resetVideoPreview() {
             const videoPreview = document.getElementById('videoPreview');
@@ -269,6 +320,11 @@
             submitBtn.disabled = true;
             resetBtn.style.display = 'none';
             errorMessage.style.display = 'none';
+            videoPreview.pause();
+            videoPreview.currentTime = 0;
+            videoPreviewBox.style.display = 'none';
+            submitBtn.disabled = true;
+            resetBtn.style.display = 'none';
 
             // Show upload boxes
             document.querySelectorAll('.upload-box').forEach(box => {
@@ -315,6 +371,9 @@
                 errorMessage.style.display = 'block';
             }
         }
+    </script>
+
+
     </script>
 
 </asp:Content>
