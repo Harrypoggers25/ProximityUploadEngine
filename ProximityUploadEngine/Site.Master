@@ -208,7 +208,7 @@
                 <span class="sidebar-text">Home</span>
             </a>
             <br />
-            <a runat="server" href="setting" class="boxed-link">
+            <a runat="server" href="Settings" class="boxed-link">
                 <i class="fas fa-cog"></i>
                 <span class="sidebar-text">Settings</span>
             </a>
