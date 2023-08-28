@@ -539,6 +539,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="assets\images\" />
+    <Folder Include="sources\contents\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
