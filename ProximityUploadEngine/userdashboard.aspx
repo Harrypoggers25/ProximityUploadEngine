@@ -38,7 +38,7 @@
         .upload-box,
         .video-preview-box {
             flex: 1;
-            height: 250px;
+            height: 200px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -79,14 +79,15 @@
         #submitBtn, #resetBtn {
             background-color: steelblue;
             border-color: royalblue;
-            width: 48%;
+            width: auto;
             border-radius: 10px;
+            max-width: 150px;
         }
 
 
 
         .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
-        .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
+        .dark-mode .fa-video-camera {
             color: white;
         }
 
@@ -114,25 +115,6 @@
         .success-icon {
             font-size: 20px;
             margin-right: 5px;
-        #submitBtn {
-            background-color: transparent;
-            margin-left: 400px;
-            width: 20%;
-            margin-top: 20px;
-            border: 2px dashed royalblue;
-            border-radius: 10px;
-        }
-
-        #resetBtn {
-            background-color: transparent;
-            width: 20%;
-            margin-top: 20px;
-            border: 2px dashed royalblue;
-            border-radius: 10px;
-        }
-
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header {
-            color: white;
         }
     </style>
     <main aria-labelledby="title">
@@ -253,7 +235,6 @@
             const submitBtn = document.getElementById('submitBtn');
             const resetBtn = document.getElementById('resetBtn');
             const errorMessage = document.getElementById('errorMessage');
-            const resetBtn = document.getElementById('resetBtn');
 
             if (selectedVideo) {
                 if (selectedVideo.type.indexOf('video/') !== 0) {
@@ -277,15 +258,6 @@
                 resetVideoPreview();
             }
         }
-                resetVideoPreview();
-            }
-        }
-
-        function resetVideoPreview() {
-            const videoPreview = document.getElementById('videoPreview');
-            const videoPreviewBox = document.getElementById('videoPreviewBox');
-            const submitBtn = document.getElementById('submitBtn');
-            const resetBtn = document.getElementById('resetBtn');
 
         function resetVideoPreview() {
             const videoPreview = document.getElementById('videoPreview');
@@ -300,11 +272,6 @@
             submitBtn.disabled = true;
             resetBtn.style.display = 'none';
             errorMessage.style.display = 'none';
-            videoPreview.pause();
-            videoPreview.currentTime = 0;
-            videoPreviewBox.style.display = 'none';
-            submitBtn.disabled = true;
-            resetBtn.style.display = 'none';
 
             // Show upload boxes
             document.querySelectorAll('.upload-box').forEach(box => {
@@ -343,18 +310,12 @@
                     videoPreview.src = "";
                     resetVideoPreview();
                     successMessage.style.display = 'none'; // Hide the success message
-                }, 1000); // Adjust the delay time (in milliseconds) as needed
-
-
+                    location.reload(); // Refresh the page after 10 seconds
+                }, 3000); // 10 seconds in milliseconds
             } else {
                 // Display error message
                 errorMessage.style.display = 'block';
             }
         }
     </script>
-
-
-    </script>
-
 </asp:Content>
-

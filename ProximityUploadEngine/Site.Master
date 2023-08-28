@@ -5,148 +5,149 @@
 <html lang="en">
 <head runat="server">
     <style>
-        .body-content {
-            padding: 0 70px !important;
-            transition: filter 0.3s ease; /* Add smooth transition effect */
-            position: relative;
+    .body-content {
+        padding: 0 70px !important;
+        transition: filter 0.3s ease; /* Add smooth transition effect */
+        position: relative;
+    }
+    /*navbar*/
+    .navbar {
+        background: linear-gradient(135deg, #000428, #004e92);
+        z-index: 2;
+    }
+
+    #pnl_hdrProfile span {
+        color: aliceblue;
+        font-family: 'Roboto', sans-serif;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    /*sidebar*/
+    .sidebar {
+        width: 65px;
+        background-color: #d3d3d3;
+        position: absolute;
+        height: 100vh;
+        overflow: hidden;
+        transition: width 0.3s;
+        z-index: 2;
+    }
+
+        .sidebar:not(:hover) span {
+            color: transparent;
         }
-        /*navbar*/
-        .navbar {
-            background: linear-gradient(135deg, #000428, #004e92);
-            z-index: 2;
+
+        .sidebar:hover {
+            width: 200px;
         }
 
-        #pnl_hdrProfile span {
-            color: aliceblue;
-            font-family: 'Roboto', sans-serif;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /*sidebar*/
-        .sidebar {
-            width: 65px;
-            background-color: #d3d3d3;
-            position: absolute;
-            height: 100vh;
-            overflow: hidden;
-            transition: width 0.3s;
-            z-index: 2;
-        }
-
-            .sidebar:not(:hover) span {
-                color: transparent;
-            }
-
-            .sidebar:hover {
-                width: 200px;
-            }
-
-            .sidebar a {
-                margin-top: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0px 20px;
-                text-decoration: none;
-            }
-
-
-
-                .sidebar a span {
-                    margin-left: 12px;
-                    color: #222;
-                    font-weight: bold;
-                }
-
-                .sidebar a i {
-                    color: #222;
-                    font-size: 20px;
-                }
-
-                .sidebar a:hover span,
-                .sidebar a:hover i {
-                    color: #004e92;
-                }
-
-                .sidebar a.text-nowrap:hover span,
-                .sidebar a.text-nowrap:hover i {
-                    color: #222;
-                }
-
-        .toggle-switch {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            bottom: 20%;
-            left: 50%;
-            transform: translateX(-50%);
+        .sidebar a {
+            margin-top: 20px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            outline: dimgrey solid 3px;
-            border-radius: 50%;
-            background-color: white;
-            cursor: pointer;
+            justify-content: space-between;
+            padding: 0px 20px;
+            text-decoration: none;
         }
 
-            .toggle-switch * {
-                position: absolute;
+
+
+            .sidebar a span {
+                margin-left: 12px;
+                color: #222;
+                font-weight: bold;
             }
 
-        .fa-moon {
+            .sidebar a i {
+                color: #222;
+                font-size: 20px;
+            }
+
+            .sidebar a:hover span,
+            .sidebar a:hover i {
+                color: #004e92;
+            }
+
+            .sidebar a.text-nowrap:hover span,
+            .sidebar a.text-nowrap:hover i {
+                color: #222;
+            }
+
+    .toggle-switch {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        bottom: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: dimgrey solid 3px;
+        border-radius: 50%;
+        background-color: white;
+        cursor: pointer;
+    }
+
+        .toggle-switch * {
+            position: absolute;
+        }
+
+    .fa-moon {
+        color: white;
+    }
+
+    .fa-sun {
+        color: orange;
+    }
+
+    .dark-mode {
+        background-color: #212434;
+    }
+
+    .dark-mode {
+        transition: background-color 0.3s ease;
+    }
+
+        .dark-mode .card {
+            background-color: #2b2f44;
             color: white;
         }
 
-        .fa-sun {
-            color: orange;
+        .dark-mode .card-header {
+            background-color: #2b2f44;
         }
 
-        .dark-mode {
-            background-color: #212434;
+        .dark-mode .sidebar {
+            background: linear-gradient(135deg,#000428, #004e92);
         }
 
-        .dark-mode {
-            transition: background-color 0.3s ease;
+        .dark-mode .fa-bars, .dark-mode .fa-box, .dark-mode .fa-cog, .dark-mode .fa-home, .dark-mode .fa-sign-out {
+            color: white;
         }
 
-            .dark-mode .card {
-                background-color: #2b2f44;
-                color: white;
-            }
-
-            .dark-mode .card-header {
-                background-color: #2b2f44;
-            }
-
-            .dark-mode .sidebar {
-                background: linear-gradient(135deg,#000428, #004e92);
-            }
-
-            .dark-mode .fa-bars, .dark-mode .fa-box, .dark-mode .fa-cog, .dark-mode .fa-home, .dark-mode .fa-sign-out {
-                color: white;
-            }
-
-            .dark-mode .sidebar-text {
-                color: white;
-            }
+        .dark-mode .sidebar-text {
+            color: white;
+        }
 
 
-            .dark-mode .sidebar a:hover span,
-            .dark-mode .sidebar a:hover i {
-                color: #9E9FA5;
-            }
+        .dark-mode .sidebar a:hover span,
+        .dark-mode .sidebar a:hover i {
+            color: #9E9FA5;
+        }
 
-            .dark-mode .sidebar a.text-nowrap:hover span,
-            .dark-mode .sidebar a.text-nowrap:hover i {
-                color: white;
-            }
+        .dark-mode .sidebar a.text-nowrap:hover span,
+        .dark-mode .sidebar a.text-nowrap:hover i {
+            color: white;
+        }
 
-            .dark-mode .footervf {
-                background-image: linear-gradient(to bottom, #1450A3, #4682A9);
-                -webkit-background-clip: text;
-                color: transparent;
-            }
+        .dark-mode .footervf {
+            background-image: linear-gradient(to bottom, #1450A3, #4682A9);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
     </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -187,12 +188,13 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
             <div class="container">
                 <a class="navbar-brand" runat="server">
-                    <img src="https://www.visionfour.com/wp-content/uploads/logo-visionfour.png" style="height: 25px;" />
+                    <img src="https://www.visionfour.com/wp-content/uploads/logo-visionfour.png" style="        height: 25px;" />
                 </a>
                 <asp:Panel ID="pnl_hdrProfile" runat="server">
-                    <span style="display: flex; align-items: center;">
+                    <span style="        display: flex;
+        align-items: center;">
                         <asp:Image ID="img_profilePicture" runat="server" ImageUrl="/assets/images/user.png" Height="30px" />
-                        <asp:Label ID="lbl_username" runat="server" Text="" Style="margin-left: 10px;"></asp:Label>
+                        <asp:Label ID="lbl_username" runat="server" Text="" Style="        margin-left: 10px;"></asp:Label>
                     </span>
                 </asp:Panel>
             </div>
