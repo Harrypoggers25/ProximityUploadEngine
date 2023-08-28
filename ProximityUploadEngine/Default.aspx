@@ -90,7 +90,7 @@
                                             <i class="fas fa-key"></i>
                                         </span>
                                     </div>
-                                    <asp:TextBox class="form-control" ID="password" placeholder="Password" runat="server"></asp:TextBox>
+                                    <asp:TextBox class="form-control" ID="password" placeholder="Password" runat="server" TextMode="Password"></asp:TextBox>
                                 </div>
                                 <asp:RequiredFieldValidator ID="rfvpassword" ControlToValidate="password" runat="server"
                                     ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic" />
@@ -105,5 +105,4 @@
             </div>
         </div>
     </main>
-
 </asp:Content>

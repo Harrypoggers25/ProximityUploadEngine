@@ -1,149 +1,149 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
+﻿<%@ Page Title="Agency-Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-    .user-header {
-        font-family: 'roboto' sans-serif;
-        font-weight: bold;
-        font-size: 30px;
-    }
-
-    .uploader-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 55vh;
-    }
-
-    .custom-card {
-        width: 50%;
-        margin-top: 5vh;
-        margin-left: 300px;
-        display: flex;
-        flex-direction: column;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        background-color: transparent;
-    }
-
-
-    .uploader {
-        display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-    .upload-box,
-    .video-preview-box {
-        flex: 1;
-        height: 200px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border: 2px dashed royalblue;
-        border-radius: 10px;
-        margin: 0 5px;
-    }
-
-        .upload-box:hover {
-            opacity: 0.5;
+        .user-header {
+            font-family: 'roboto' sans-serif;
+            font-weight: bold;
+            font-size: 30px;
         }
 
-    #videoPreviewBox {
-        display: none;
-    }
+        .uploader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 55vh;
+        }
 
-    #videoPreview {
-        width: 95%;
-        height: 95%;
-        object-fit: cover;
-    }
-
-    .border-divider {
-        width: 2px;
-        height: 100%;
-        background-color: gray;
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 50%;
-        margin: 20px auto;
-    }
-
-    #submitBtn, #resetBtn {
-        background-color: steelblue;
-        border-color: royalblue;
-        width: 48%;
-        border-radius: 10px;
-    }
-
-
-
-    .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
-    .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
-        color: white;
-    }
-
-    .error-message {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 0, 0, 0.8);
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        text-align: center;
-    }
-
-    .success-message {
-        display: none;
-        text-align: center;
-        margin-top: 10px;
-        font-size: 16px;
-        color: green;
-    }
-
-    .success-icon {
-        font-size: 20px;
-        margin-right: 5px;
-    }
-
-    .border-divider {
-        width: 2px;
-        height: 100%;
-        background-color: gray;
-        margin: 0 10px;
-    }
-
-    .option-dropdown {
-        display: inline-block;
-        margin-left: 10px;
-    }
-
-    #optionSelector {
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: transparent;
-        cursor: pointer;
-    }
-
-        #optionSelector option {
-            padding: 5px;
-            font-size: 14px;
+        .custom-card {
+            width: 50%;
+            margin-top: 5vh;
+            margin-left: 300px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
             background-color: transparent;
-            color: black;
         }
 
+
+        .uploader {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .upload-box,
+        .video-preview-box {
+            flex: 1;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed royalblue;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+
+            .upload-box:hover {
+                opacity: 0.5;
+            }
+
+        #videoPreviewBox {
+            display: none;
+        }
+
+        #videoPreview {
+            width: 95%;
+            height: 95%;
+            object-fit: cover;
+        }
+
+        .border-divider {
+            width: 2px;
+            height: 100%;
+            background-color: gray;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        #submitBtn, #resetBtn {
+            background-color: steelblue;
+            border-color: royalblue;
+            width: auto;
+            border-radius: 10px;
+            max-width: 150px;
+        }
+
+
+
+        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
+        .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
+            color: white;
+        }
+
+        .error-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 16px;
+            color: green;
+        }
+
+        .success-icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .border-divider {
+            width: 2px;
+            height: 100%;
+            background-color: gray;
+            margin: 0 10px;
+        }
+
+        .option-dropdown {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        #optionSelector {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+            #optionSelector option {
+                padding: 5px;
+                font-size: 14px;
+                background-color: transparent;
+                color: black;
+            }
     </style>
     <main aria-labelledby="title">
         <div class="container">
@@ -235,11 +235,11 @@
                 const currentDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
                 currentTimeElement.textContent += ` ${currentDate}`;
             }
-              const optionSelector = document.getElementById('optionSelector');
+            const optionSelector = document.getElementById('optionSelector');
 
-    optionSelector.addEventListener('change', function() {
-        // No need to update the selectedOptionText span
-    });
+            optionSelector.addEventListener('change', function () {
+                // No need to update the selectedOptionText span
+            });
 
 
             updateTime();
@@ -350,19 +350,19 @@
                 });
 
                 // Clear background music and reset video after a delay
-                 setTimeout(function () {
-            videoPreview.pause();
-            videoPreview.currentTime = 0;
-            videoPreview.src = "";
-            resetVideoPreview();
-            successMessage.style.display = 'none'; // Hide the success message
-            location.reload(); // Refresh the page after 10 seconds
-        }, 3000); // 10 seconds in milliseconds
-    } else {
-        // Display error message
-        errorMessage.style.display = 'block';
-    }
-}
+                setTimeout(function () {
+                    videoPreview.pause();
+                    videoPreview.currentTime = 0;
+                    videoPreview.src = "";
+                    resetVideoPreview();
+                    successMessage.style.display = 'none'; // Hide the success message
+                    location.reload(); // Refresh the page after 10 seconds
+                }, 3000); // 10 seconds in milliseconds
+            } else {
+                // Display error message
+                errorMessage.style.display = 'block';
+            }
+        }
     </script>
 
 </asp:Content>
