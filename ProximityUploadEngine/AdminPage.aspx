@@ -84,9 +84,15 @@
             </label>
             <br />
         </div>
+        <div id="dlg-delete">
+            <span>Are you sure you want to delete this row?</span>
+        </div>
     </main>
     <script>
         $(document).ready(function () {
+            const dlgDelete = $("#dlg-delete");
+            const dlgAgency = $("#dlg-agency");
+
             // datatable initialization
             const dataTable = new DataTable('#tbl-agency', {
                 paging: false,
@@ -137,43 +143,93 @@
             }
             $('#tbl-agency_wrapper div.toolbar').html('Admin Page');
 
-            // edit row event
-            dataTable.on('click', 'td.editor-edit', function (e) {
-                e.preventDefault();
-            });
-
-            // delete row event
-            dataTable.on('click', 'td.editor-delete', function (e) {
-                const row = $(this).closest('tr'); // Get the closest row
-                const rowData = dataTable.row(row).data();
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'AdminPage.aspx/DeleteAgency', // Specify the method in the code behind
-                    data: JSON.stringify({ id: rowData.id }), // Pass the parameter as JSON
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function () {
-                        console.log("Deleted row " + rowData.id);
-                        refreshTable();
-                    },
-                    error: function (error) {
-                        console.log("error: unable to delete row");
-                    }
-                });
-                e.preventDefault();
-            });
-
-            // dialog initialization (Add row event)
-            var currentId;
-            $("#dlg-agency").dialog({
+            // delete dialog initialization (delete row event)
+            dlgDelete.dialog({
                 autoOpen: false,
                 modal: true,
                 closeOnEscape: false,
                 draggable: false,
                 resizable: false,
                 width: 500,
-                buttons: [
+                close: function () {
+                    dlgDelete.off("dialogopen");
+                }
+            });
+            dataTable.on('click', 'td.editor-delete', function (e) {
+                e.preventDefault();
+
+                const row = $(this).closest('tr'); // Get the closest row
+                const rowData = dataTable.row(row).data();
+
+                $('.ui-dialog-titlebar-close').html('<i class="fa fa-times" aria-hidden="true"></i>');
+                dlgDelete.on("dialogopen", function (event, ui) {
+                    dlgDelete.dialog("option", "title", "Delete Row (ID: " + rowData.id + ")");
+                });
+                dlgDelete.dialog("option", "buttons", [
+                    {
+                        text: "Confirm",
+                        class: "btn btn-primary",
+                        click: function () {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'AdminPage.aspx/DeleteAgency', // Specify the method in the code behind
+                                data: JSON.stringify({ id: rowData.id }), // Pass the parameter as JSON
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                success: function () {
+                                    console.log("Deleted row " + rowData.id);
+                                    refreshTable();
+                                    dlgDelete.dialog("close");
+                                },
+                                error: function (error) {
+                                    console.log("error: unable to delete row");
+                                }
+                            });
+                        }
+                    }
+                ]);
+                dlgDelete.dialog("open");
+            });
+
+            // agency dialog initialization (Add and edit row event)
+            dlgAgency.dialog({
+                autoOpen: false,
+                modal: true,
+                closeOnEscape: false,
+                draggable: false,
+                resizable: false,
+                width: 500,
+                close: function (event, ui) {
+                    $("#tb-name").val("");
+                    $("#tb-email").val("");
+                    $("#tb-password").val("");
+                    dlgAgency.off("dialogopen");
+                }
+            });
+
+            //add row event
+            $("#btnTbAddRow").click(function (e) {
+                e.preventDefault();
+
+                var currentId;
+                dlgAgency.on("dialogopen", function (event, ui) {
+                    $('.ui-dialog-titlebar-close').html('<i class="fa fa-times" aria-hidden="true"></i>');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'AdminPage.aspx/getFirstEmptyId',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (response) {
+                            currentId = JSON.parse(response.d);
+                            dlgAgency.dialog("option", "title", "Add New Row (ID: " + currentId + ")");
+                        },
+                        error: function (error) {
+                            console.log("error: unable to get row id");
+                        }
+                    });
+                });
+                dlgAgency.dialog("option", "buttons", [
                     {
                         text: "Confirm",
                         class: "btn btn-primary",
@@ -194,10 +250,7 @@
                                     contentType: 'application/json; charset=utf-8',
                                     success: function () {
                                         refreshTable();
-                                        $("#tb-name").val("");
-                                        $("#tb-email").val("");
-                                        $("#tb-password").val("");
-                                        $("#dlg-agency").dialog("close");
+                                        dlgAgency.dialog("close");
                                     },
                                     error: function (error) {
                                         console.log("error: unable to add new row");
@@ -206,28 +259,57 @@
                             }
                         }
                     }
-                ],
-                open: function (event, ui) {
-                    $('.ui-dialog-titlebar-close').html('<i class="fa fa-times" aria-hidden="true"></i>');
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'AdminPage.aspx/getFirstEmptyId',
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        success: function (response) {
-                            currentId = JSON.parse(response.d);
-                            $("#dlg-agency").dialog("option", "title", "Add New Row (ID: " + currentId + ")");
-                        },
-                        error: function (error) {
-                            console.log("error: unable to get row id");
-                        }
-                    });
-                }
+                ]);
+                dlgAgency.dialog("open");
             });
-            $("#btnTbAddRow").click(function (e) {
+
+            // edit row event
+            dataTable.on('click', 'td.editor-edit', function (e) {
                 e.preventDefault();
-                $("#dlg-agency").dialog("open");
+
+                const row = $(this).closest('tr'); // Get the closest row
+                const rowData = dataTable.row(row).data();
+
+                dlgAgency.on("dialogopen", function (event, ui) {
+                    $('.ui-dialog-titlebar-close').html('<i class="fa fa-times" aria-hidden="true"></i>');
+                    dlgAgency.dialog("option", "title", "Edit Row (ID: " + rowData.id + ")");
+
+                    $("#tb-name").val(rowData.name);
+                    $("#tb-email").val(rowData.email);
+                    $("#tb-password").val(rowData.password);
+                });
+                dlgAgency.dialog("option", "buttons", [
+                    {
+                        text: "Confirm",
+                        class: "btn btn-primary",
+                        click: function () {
+                            var agency = {
+                                id: rowData.id,
+                                name: $("#tb-name").val(),
+                                email: $("#tb-email").val(),
+                                password: $("#tb-password").val()
+                            };
+                            if (agency.name === "" || agency.email === "" || agency.password === "") {
+                                alert("Please fill in all fields.");
+                            } else {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'AdminPage.aspx/updateAgency',
+                                    data: JSON.stringify({ agency: agency }),
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function () {
+                                        refreshTable();
+                                        dlgAgency.dialog("close");
+                                    },
+                                    error: function (error) {
+                                        console.log("error: unable to edit row");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                ]);
+                dlgAgency.dialog("open");
             });
         });
     </script>
