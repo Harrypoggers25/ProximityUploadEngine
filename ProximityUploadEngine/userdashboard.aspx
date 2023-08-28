@@ -190,29 +190,6 @@
                     <i class="fa fa-upload" aria-hidden="true" style="font-size: 15px; margin-right: 5px;"></i>Submit
                 </button>
 
-        <center>
-            <label class="user-header">UPLOAD YOUR AD</label></center>
-        <div class="uploader-container">
-            <div class="custom-card">
-                <div class="uploader">
-                    <div class="upload-box" onclick="document.getElementById('videoFile').click()">
-                        <span class="uploadertext">Choose File</span>
-                    </div>
-                    <div class="border-divider"></div>
-                    <div class="upload-box" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                        <span class="uploadertext">Drag your video</span>
-                    </div>
-                </div>
-                <div class="video-preview-box" id="videoPreviewBox">
-                    <video id="videoPreview" controls autoplay loop muted>
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <button id="resetBtn" onclick="resetVideoPreview()" style="display: none;">Change Ads</button>
-                <button id="submitBtn" onclick="submitVideo()" disabled>Submit</button>
-
-            </div>
-        </div>
         <input id="videoFile" type="file" accept="video/*" onchange="handleVideoFile()" style="display: none;">
     </main>
 
