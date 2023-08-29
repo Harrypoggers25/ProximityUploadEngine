@@ -59,6 +59,37 @@ namespace ProximityUploadEngine
             }
             return agency;
         }
+        public Agency GetAgency(string name)
+        {
+            var agency = new Agency();
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("SELECT * FROM tb_agency WHERE name = @name", conn))
+                {
+                    cmd.Parameters.AddWithValue("name", name);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            agency.id = Convert.ToInt32(reader["id"]);
+                            agency.name = reader["name"].ToString();
+                            agency.email = reader["email"].ToString();
+                            agency.password = reader["password"].ToString();
+                        }
+                        else
+                        {
+                            // No user found with the provided email
+                            // You might want to return null or handle this case as needed
+                            return null;
+                        }
+                    }
+                }
+            }
+            return agency;
+        }
         public List<Agency> GetAllAgency()
         {
             var users = new List<Agency>();
@@ -87,7 +118,7 @@ namespace ProximityUploadEngine
 
             return users;
         }
-        public int getFirstEmptyAgency()
+        public int GetFirstEmptyAgency()
         {
             using (var conn = new NpgsqlConnection(connectionString))
             {
@@ -96,7 +127,7 @@ namespace ProximityUploadEngine
                 using (var cmd = new NpgsqlCommand("SELECT id FROM tb_agency ORDER BY id ASC;", conn))
                 using (var reader = cmd.ExecuteReader())
                 {
-                    int counter = 0; 
+                    int counter = 0;
 
                     while (reader.Read())
                     {
@@ -111,6 +142,41 @@ namespace ProximityUploadEngine
                     }
 
                     return counter;
+                }
+            }
+        }
+        public bool IsAgencyExist(string name)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("SELECT name FROM tb_agency WHERE name = @name", conn))
+                {
+                    cmd.Parameters.AddWithValue("name", name);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return reader.HasRows;
+                    }
+                }
+            }
+        }
+        public bool IsAgencyPasswordCorrect(string name, string password)
+        {
+            using (var conn = new NpgsqlConnection(connectionString))
+            {
+                conn.Open();
+
+                using (var cmd = new NpgsqlCommand("SELECT name, password FROM tb_agency WHERE name = @name AND password = @password", conn))
+                {
+                    cmd.Parameters.AddWithValue("name", name);
+                    cmd.Parameters.AddWithValue("password", password);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        return reader.HasRows;
+                    }
                 }
             }
         }

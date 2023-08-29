@@ -143,9 +143,9 @@
             }
 
             .dark-mode .footervf {
-                background-image: linear-gradient(to bottom, #1450A3, #4682A9);
+                background: linear-gradient(to bottom, #1450A3, #4682A9);
                 -webkit-background-clip: text;
-                color: transparent;
+                -webkit-text-fill-color: transparent;
             }
     </style>
     <meta charset="utf-8" />
@@ -215,7 +215,7 @@
             <br>
             <a runat="server" href="Default" class="boxed-link">
                 <i class="fas fa-sign-out"></i>
-                <span class="sidebar-text">LogOut</span>
+                <span class="sidebar-text">Logout</span>
             </a>
             <br />
             <br />
