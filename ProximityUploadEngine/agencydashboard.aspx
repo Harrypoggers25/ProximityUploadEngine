@@ -28,6 +28,11 @@
             background-color: transparent;
         }
 
+        .inactive-card {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
 
         .uploader {
             display: flex;
@@ -125,11 +130,17 @@
         }
 
         .option-dropdown {
-            display: inline-block;
-            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 400px;
+            margin: 0 auto;
         }
 
         #optionSelector {
+            width: 100%;
             padding: 8px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -160,22 +171,20 @@
             </div>
         </div>
 
-
-        <div class="custom-card">
+        <div class="border-divider"></div>
+        <div class="option-dropdown">
+            <select id="optionSelector">
+                <option value="" disabled selected>Choose Company</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+        <div class="custom-card inactive-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
             </center>
-            <div class="border-divider"></div>
-            <div class="option-dropdown">
-                <select id="optionSelector">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                    <!-- Add more options as needed -->
-                </select>
-            </div>
-            <br />
+
             <div class="uploader">
                 <div class="upload-box" onclick="document.getElementById('videoFile').click()">
                     <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 50px;"></i>
@@ -236,9 +245,14 @@
                 currentTimeElement.textContent += ` ${currentDate}`;
             }
             const optionSelector = document.getElementById('optionSelector');
+            const customCard = document.querySelector('.custom-card');
 
             optionSelector.addEventListener('change', function () {
-                // No need to update the selectedOptionText span
+                if (optionSelector.value !== "") {
+                    customCard.classList.remove('inactive-card'); // Remove the inactive class
+                } else {
+                    customCard.classList.add('inactive-card'); // Add the inactive class
+                }
             });
 
 
