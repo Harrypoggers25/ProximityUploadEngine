@@ -8,7 +8,7 @@
             font-weight: bold;
             font-size: 30px;
         }
-
+        
         .uploader-container {
             display: flex;
             justify-content: center;
