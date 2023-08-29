@@ -250,7 +250,6 @@
                 submitBtn.disabled = false;
                 resetBtn.style.display = 'block';
 
-                // Hide upload boxes
                 document.querySelectorAll('.upload-box').forEach(box => {
                     box.style.display = 'none';
                 });
@@ -273,7 +272,6 @@
             resetBtn.style.display = 'none';
             errorMessage.style.display = 'none';
 
-            // Show upload boxes
             document.querySelectorAll('.upload-box').forEach(box => {
                 box.style.display = 'flex';
             });
@@ -289,31 +287,26 @@
             const successMessage = document.getElementById('successMessage');
 
             if (selectedVideo) {
-                // Display success message
                 successMessage.style.display = 'block';
 
-                // Hide other elements
                 submitBtn.disabled = true;
                 resetBtn.style.display = 'none';
                 videoPreviewBox.style.display = 'none';
                 errorMessage.style.display = 'none';
 
-                // Show upload boxes
                 document.querySelectorAll('.upload-box').forEach(box => {
                     box.style.display = 'flex';
                 });
 
-                // Clear background music and reset video after a delay
                 setTimeout(function () {
                     videoPreview.pause();
                     videoPreview.currentTime = 0;
                     videoPreview.src = "";
                     resetVideoPreview();
-                    successMessage.style.display = 'none'; // Hide the success message
-                    location.reload(); // Refresh the page after 10 seconds
-                }, 3000); // 10 seconds in milliseconds
+                    successMessage.style.display = 'none';
+                    location.reload();
+                }, 3000);
             } else {
-                // Display error message
                 errorMessage.style.display = 'block';
             }
         }
