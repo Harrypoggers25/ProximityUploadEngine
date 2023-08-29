@@ -39,7 +39,7 @@ namespace ProximityUploadEngine
         public static string getFirstEmptyId()
         {
             var db = new AgencyData();
-            return JsonConvert.SerializeObject(db.getFirstEmptyAgency());
+            return JsonConvert.SerializeObject(db.GetFirstEmptyAgency());
         }
         [WebMethod]
         public static void updateAgency(Agency agency)
@@ -48,7 +48,7 @@ namespace ProximityUploadEngine
             db.UpdateAgency(agency);
         }
         [WebMethod]
-        public static void DeleteAgency(int id)
+        public static void deleteAgency(int id)
         {
             var db = new AgencyData();
             db.DeleteAgency(id);

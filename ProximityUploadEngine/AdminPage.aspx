@@ -172,7 +172,7 @@
                         click: function () {
                             $.ajax({
                                 type: 'POST',
-                                url: 'AdminPage.aspx/DeleteAgency', // Specify the method in the code behind
+                                url: 'AdminPage.aspx/deleteAgency', // Specify the method in the code behind
                                 data: JSON.stringify({ id: rowData.id }), // Pass the parameter as JSON
                                 contentType: 'application/json; charset=utf-8',
                                 dataType: 'json',
