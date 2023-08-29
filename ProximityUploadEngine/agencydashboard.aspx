@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Agency-Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
+﻿<%@ Page Title="Agency-Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="agencydashboard.aspx.cs" Inherits="ProximityUploadEngine.agencydashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -90,8 +90,7 @@
 
 
 
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
-        .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
+        .dark-mode * {
             color: white;
         }
 
@@ -162,7 +161,8 @@
                     <div class="card px-3 py-2">
                         <div class="card-body">
                             <h2 class="fs-4">Hi,
-                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label></h2>
+                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label>
+                            </h2>
                             <span id="currentTime"><%: DateTime.Now.TimeOfDay.Hours %>:<%: DateTime.Now.TimeOfDay.Minutes %> AM <%: DateTime.Now.Date.Day %>/<%: DateTime.Now.Date.Month %>/<%: DateTime.Now.Date.Year %></span>
                         </div>
                     </div>
