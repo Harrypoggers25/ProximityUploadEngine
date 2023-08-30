@@ -9,12 +9,15 @@ namespace ProximityUploadEngine
         {
             var master = (SiteMaster)this.Master;
             var agency = master.getAgencyFromSession();
-
             master.setLblUsername(agency.name);
-            lbl_username1.Text = agency.name;
 
             tb_email.Text = agency.email;
-            tb_username.Text = agency.name;
+            lbl_username1.Text = agency.name;
+
+            if (!IsPostBack)
+            {
+                tb_username.Text = agency.name;
+            }
         }
         protected void UploadImage_Click(object sender, EventArgs e)
         {

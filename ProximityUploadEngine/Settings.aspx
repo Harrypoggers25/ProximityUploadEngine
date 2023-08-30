@@ -165,6 +165,7 @@
                     <div class="row d-flex flex-column">
                         <div class="col">
                             <ul class="nav nav-tabs Nav-Setting">
+                                <asp:HiddenField ID="n_tabIndex" runat="server" Value="1" />
                                 <li class="nav-item">
                                     <a class="nav-link active" href="#" style="font-weight: 700;">Profile</a>
                                 </li>
@@ -208,7 +209,7 @@
                                         <div class="col mt-4">
                                             <label>
                                                 Old Password:<br />
-                                                <asp:TextBox ID="tb_oldPassword" runat="server" CssClass="form-control w-100" TextMode="Password"></asp:TextBox>
+                                                <asp:TextBox ID="tb_oldPassword" runat="server" CssClass="form-control w-100"></asp:TextBox>
                                             </label>
                                         </div>
                                         <div class="col mt-4">
@@ -219,7 +220,7 @@
                                         </div>
                                         <div class="col mt-4">
                                             <label>
-                                                Confirm :<br />
+                                                Confirm Password :<br />
                                                 <asp:TextBox ID="tb_cfmPassword" runat="server" CssClass="form-control w-100"></asp:TextBox>
                                             </label>
                                         </div>
@@ -242,17 +243,18 @@
 
             // setting panel
             var currentPanel = $(".Panel-Setting:first-of-type");
-            updatePanel(1);
-            function updatePanel(panel) {
+            tabIndex = $("#<%= n_tabIndex.ClientID %>");
+            updatePanel(tabIndex.val());
+            function updatePanel(index) {
                 $(".Panel-Setting").hide();
-                currentPanel = $(".Panel-Setting:nth-of-type(" + panel + ")");
+                currentPanel = $(".Panel-Setting:nth-of-type(" + index + ")");
                 currentPanel.show();
             }
             $(".Nav-Setting a").click(function () {
                 $(".Nav-Setting a").removeClass("active");
                 $(this).addClass("active");
-                const n = $(this).closest('.nav-item').index();
-                updatePanel(n + 1);
+                tabIndex.val($(this).closest('.nav-item').index());
+                updatePanel(tabIndex.val());
             });
 
             // upload image to relative file handler
