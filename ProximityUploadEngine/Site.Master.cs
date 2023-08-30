@@ -13,6 +13,14 @@ namespace ProximityUploadEngine
         {
 
         }
+        public void setLblUsername(string username)
+        {
+            lbl_username.Text = username;
+        }
+        public void updateProfilePicture()
+        {
+
+        }
         public void toggleLoginHiddenElement(bool hidden)
         {
             if (hidden)
@@ -29,10 +37,17 @@ namespace ProximityUploadEngine
         public Agency getAgencyFromSession()
         {
             var agency = new Agency();
-            agency.id = Convert.ToInt32(Session["id"]);
-            agency.name = Session["name"].ToString();
-            agency.email = Session["email"].ToString();
-            agency.password = Session["password"].ToString();
+            try
+            {
+                agency.id = Convert.ToInt32(Session["id"]);
+                agency.name = Session["name"].ToString();
+                agency.email = Session["email"].ToString();
+                agency.password = Session["password"].ToString();
+            }
+            catch (Exception ex)
+            {
+                Response.Redirect("Default.aspx");
+            }
             return agency;
         }
         public void updateSessionFromUser(Agency user)
