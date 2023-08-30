@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="userdashboard.aspx.cs" Inherits="ProximityUploadEngine.userdashboard" %>
+﻿<%@ Page Title="Agency-Dashboard" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="agencydashboard.aspx.cs" Inherits="ProximityUploadEngine.agencydashboard" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -28,6 +28,10 @@
             background-color: transparent;
         }
 
+        .inactive-card {
+            opacity: 0.5;
+            pointer-events: none;
+        }
 
         .uploader {
             display: flex;
@@ -79,14 +83,14 @@
         #submitBtn, #resetBtn {
             background-color: steelblue;
             border-color: royalblue;
-            width: 48%;
+            width: auto;
             border-radius: 10px;
+            max-width: 150px;
         }
 
 
 
-        .dark-mode #submitBtn, .dark-mode #resetBtn, .dark-mode .uploadertext, .dark-mode .user-header, .dark-mode .fa-cloud-upload,
-        .dark-mode .fa-video-camera, .dark-mode #optionSelector, .dark-mode #optionSelector-option {
+        .dark-mode * {
             color: white;
         }
 
@@ -124,11 +128,17 @@
         }
 
         .option-dropdown {
-            display: inline-block;
-            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 400px;
+            margin: 0 auto;
         }
 
         #optionSelector {
+            width: 100%;
             padding: 8px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -151,7 +161,8 @@
                     <div class="card px-3 py-2">
                         <div class="card-body">
                             <h2 class="fs-4">Hi,
-                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label></h2>
+                                <asp:Label ID="lbl_username" runat="server" Text=""></asp:Label>
+                            </h2>
                             <span id="currentTime"><%: DateTime.Now.TimeOfDay.Hours %>:<%: DateTime.Now.TimeOfDay.Minutes %> AM <%: DateTime.Now.Date.Day %>/<%: DateTime.Now.Date.Month %>/<%: DateTime.Now.Date.Year %></span>
                         </div>
                     </div>
@@ -159,22 +170,20 @@
             </div>
         </div>
 
-
-        <div class="custom-card">
+        <div class="border-divider"></div>
+        <div class="option-dropdown">
+            <select id="optionSelector">
+                <option value="" disabled selected>Choose Company</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+        <div class="custom-card inactive-card">
             <center>
                 <label class="user-header">UPLOAD YOUR ADVERTISEMENT</label>
             </center>
-            <div class="border-divider"></div>
-            <div class="option-dropdown">
-                <select id="optionSelector">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                    <!-- Add more options as needed -->
-                </select>
-            </div>
-            <br />
+
             <div class="uploader">
                 <div class="upload-box" onclick="document.getElementById('videoFile').click()">
                     <i class="fa fa-cloud-upload" aria-hidden="true" style="font-size: 50px;"></i>
@@ -235,9 +244,14 @@
                 currentTimeElement.textContent += ` ${currentDate}`;
             }
             const optionSelector = document.getElementById('optionSelector');
+            const customCard = document.querySelector('.custom-card');
 
             optionSelector.addEventListener('change', function () {
-                // No need to update the selectedOptionText span
+                if (optionSelector.value !== "") {
+                    customCard.classList.remove('inactive-card'); // Remove the inactive class
+                } else {
+                    customCard.classList.add('inactive-card'); // Add the inactive class
+                }
             });
 
 
@@ -357,8 +371,7 @@
                     successMessage.style.display = 'none'; // Hide the success message
                     location.reload(); // Refresh the page after 10 seconds
                 }, 3000); // 10 seconds in milliseconds
-            }
-            else {
+            } else {
                 // Display error message
                 errorMessage.style.display = 'block';
             }

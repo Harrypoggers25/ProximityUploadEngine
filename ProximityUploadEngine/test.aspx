@@ -12,10 +12,11 @@
 
         .img-profile-picture-wrapper {
             position: relative;
-            background-color: #004e92;
+            background-color: black;
             border-radius: 50%;
             aspect-ratio: 1;
             width: 150px;
+            overflow: hidden;
         }
 
             .img-profile-picture-wrapper > * {
@@ -24,6 +25,10 @@
 
             .img-profile-picture-wrapper img {
                 height: 100%;
+            }
+
+            .img-profile-picture-wrapper input {
+                display: none;
             }
 
             .img-profile-picture-wrapper:hover .icn-profilePictureHover {
@@ -57,55 +62,19 @@
                 <i class="fa fa-camera" aria-hidden="true"></i>
                 <span>Change photo</span>
             </div>
+            <asp:FileUpload ID="fu_imgUploadHandler" runat="server" accept="image/*" />
+            <asp:Button ID="btn_imgUploadHandler" runat="server" Text="Button" OnClick="UploadImage_Click" />
         </div>
-        <%--<div>
-            <h2>File Upload Example</h2>
-            <asp:FileUpload ID="FileUploadControl" runat="server" />
-            <br />
-            <asp:Button ID="UploadButton" runat="server" Text="Upload" OnClick="UploadButton_Click" />
-            <br />
-            <asp:Label ID="ResultLabel" runat="server" />
-        </div>--%>
     </main>
     <script>
         $(document).ready(function () {
             // upload image to relative file handler
             $(".icn-profilePictureHover").click(function () {
-                var input = $("<input>")
-                    .attr("type", "file")
-                    .attr("accept", "image/*")
-                    .attr("multiple", false)
-                    .change(function (event) {
-                        var selectedImage = event.target.files[0];
-                        if (selectedImage) {
-                            uploadFileToRelativeDir(selectedImage);
-                        }
-                        input.remove();
-                    });
-
-                input.click();
+                $("#<%= fu_imgUploadHandler.ClientID %>").click();
             });
-
-            function uploadFileToRelativeDir(file) {
-                var formData = new FormData();
-                formData.append("file", file);
-
-                $.ajax({
-                    type: "POST",
-                    url: "test.aspx/UploadImage",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    dataType: "json",
-                    success: function (response) {
-                        console.log(response.d);
-                    },
-                    error: function () {
-                        console.log("Error: Unable to upload image");
-                    }
-                });
-            }
-
+            $("#<%= fu_imgUploadHandler.ClientID %>").change(function () {
+                $("#<%= btn_imgUploadHandler.ClientID %>").click();
+            });
         })
     </script>
 </asp:Content>

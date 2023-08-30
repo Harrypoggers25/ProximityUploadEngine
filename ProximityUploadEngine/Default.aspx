@@ -40,6 +40,14 @@
                 color: inherit;
                 width: 15px;
             }
+
+        #icn_showPassword_show {
+            display: none;
+        }
+
+        .form-group {
+            width: 75%;
+        }
     </style>
 
     <main>
@@ -71,7 +79,12 @@
                                             <i class="fas fa-key"></i>
                                         </span>
                                     </div>
-                                    <asp:TextBox class="form-control" ID="tb_password" placeholder="Password" runat="server" TextMode="Password"></asp:TextBox>
+                                    <asp:TextBox ID="tb_password" CssClass="form-control" placeholder="Password" runat="server" TextMode="Password"></asp:TextBox>
+                                    <div id="btn_showPassword" class="btn btn-primary">
+                                        <i id="icn_showPassword_show" class="fa fa-eye" aria-hidden="true"></i>
+                                        <i id="icn_showPassword_hide" class="fa fa-eye-slash" aria-hidden="true"></i>
+                                    </div>
+
                                 </div>
                                 <asp:RequiredFieldValidator ID="rfv_password" ControlToValidate="tb_password" runat="server"
                                     ErrorMessage="Password is required" ForeColor="Red" Display="Dynamic" />
@@ -84,5 +97,24 @@
             </div>
         </div>
     </main>
+    <script>
+        $(document).ready(function () {
+            var isShowPassword = false;
+            $("#btn_showPassword").click(function () {
+                isShowPassword = !isShowPassword;
+                if (isShowPassword) {
+                    $("#icn_showPassword_show").show();
+                    $("#icn_showPassword_hide").hide();
+                    $("#<%= tb_password.ClientID %>").attr("type", "text");
 
+                }
+                else {
+                    $("#icn_showPassword_show").hide();
+                    $("#icn_showPassword_hide").show();
+                    $("#<%= tb_password.ClientID %>").attr("type", "password");
+                }
+                $("#<%= tb_password.ClientID %>").focus();
+            });
+        })
+    </script>
 </asp:Content>
