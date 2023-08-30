@@ -24,6 +24,24 @@ namespace ProximityUploadEngine
         protected global::System.Web.UI.WebControls.Image img_profilePicture;
 
         /// <summary>
+        /// fu_imgUploadHandler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fu_imgUploadHandler;
+
+        /// <summary>
+        /// btn_imgUploadHandler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_imgUploadHandler;
+
+        /// <summary>
         /// lbl_lastVisited control.
         /// </summary>
         /// <remarks>

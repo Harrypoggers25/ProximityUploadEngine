@@ -13,30 +13,39 @@ namespace ProximityUploadEngine
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
-        //[WebMethod]
-        //public static string UploadImage(HttpContext context)
-        //{
-        //    try
-        //    {
-        //        HttpPostedFile postedFile = context.Request.Files[0];
-        //        if (uploadedFile != null && uploadedFile.ContentLength > 0)
-        //        {
-        //            string fileName = Path.GetFileName(uploadedFile.FileName);
-        //            string savePath = HttpContext.Current.Server.MapPath("~/uploads/") + fileName;
-        //            uploadedFile.SaveAs(savePath);
-        //            return "{\"success\": true, \"message\": \"File uploaded successfully.\"}";
-        //        }
-        //        else
-        //        {
-        //            return "{\"success\": false, \"message\": \"No file uploaded.\"}";
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return "{\"success\": false, \"message\": \"Error: " + ex.Message + "\"}";
-        //    }
-        //}
+        protected void UploadImage_Click(object sender, EventArgs e)
+        {
+            if (fu_imgUploadHandler.HasFile)
+            {
+                string fileName = "profile_picture" + Path.GetExtension(fu_imgUploadHandler.FileName);
+                string rel_filePath = "/sources/profile_pictures/_test/" + fileName;
+
+                updateImage(img_profilePicture, fileName, rel_filePath);
+            }
+        }
+        public void updateImage(Image img, string fileName, string rel_filePath)
+        {
+            string abs_filePath = Server.MapPath("~" + rel_filePath);
+            fu_imgUploadHandler.SaveAs(abs_filePath);
+
+            img.ImageUrl = rel_filePath;
+            using (System.Drawing.Image imgSrc = System.Drawing.Image.FromFile(abs_filePath))
+            {
+                int srcWidth = imgSrc.Width;
+                int srcHeight = imgSrc.Height;
+                if (srcHeight >= srcWidth)
+                {
+                    img.Style["height"] = "auto";
+                    img.Style["width"] = "100%";
+                }
+                else
+                {
+                    img.Style["width"] = "auto";
+                    img.Style["height"] = "100%";
+                }
+            }
+        }
+
     }
 }

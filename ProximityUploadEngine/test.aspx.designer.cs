@@ -15,12 +15,30 @@ namespace ProximityUploadEngine
     {
 
         /// <summary>
-        /// tb_password control.
+        /// img_profilePicture control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_password;
+        protected global::System.Web.UI.WebControls.Image img_profilePicture;
+
+        /// <summary>
+        /// fu_imgUploadHandler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.FileUpload fu_imgUploadHandler;
+
+        /// <summary>
+        /// btn_imgUploadHandler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btn_imgUploadHandler;
     }
 }

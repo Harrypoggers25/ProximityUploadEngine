@@ -12,10 +12,11 @@
 
         .img-profile-picture-wrapper {
             position: relative;
-            background-color: #004e92;
+            background-color: black;
             border-radius: 50%;
             aspect-ratio: 1;
             width: 150px;
+            overflow: hidden;
         }
 
             .img-profile-picture-wrapper > * {
@@ -24,6 +25,10 @@
 
             .img-profile-picture-wrapper img {
                 height: 100%;
+            }
+
+            .img-profile-picture-wrapper input {
+                display: none;
             }
 
             .img-profile-picture-wrapper:hover .icn-profilePictureHover {
@@ -49,83 +54,26 @@
                 font-size: 17px;
                 font-weight: 600;
             }
-
-        #icn_showPassword_show {
-            display: none;
-        }
     </style>
     <main>
-        <%--<div class="img-profile-picture-wrapper">
+        <div class="img-profile-picture-wrapper">
             <asp:Image ID="img_profilePicture" runat="server" ImageUrl="/assets/images/user.png" />
             <div class="icn-profilePictureHover">
                 <i class="fa fa-camera" aria-hidden="true"></i>
                 <span>Change photo</span>
             </div>
-        </div>--%>
-        <div class="input-group mb-3">
-            <asp:TextBox ID="tb_password" CssClass="form-control" placeholder="Password" runat="server" TextMode="Password"></asp:TextBox>
-            <div id="btn_showPassword" class="btn btn-primary">
-                <i id="icn_showPassword_show" class="fa fa-eye" aria-hidden="true"></i>
-                <i id="icn_showPassword_hide" class="fa fa-eye-slash" aria-hidden="true"></i>
-            </div>
+            <asp:FileUpload ID="fu_imgUploadHandler" runat="server" accept="image/*" />
+            <asp:Button ID="btn_imgUploadHandler" runat="server" Text="Button" OnClick="UploadImage_Click" />
         </div>
     </main>
     <script>
-        //$(document).ready(function () {
-        //    // upload image to relative file handler
-        //    $(".icn-profilePictureHover").click(function () {
-        //        var input = $("<input>")
-        //            .attr("type", "file")
-        //            .attr("accept", "image/*")
-        //            .attr("multiple", false)
-        //            .change(function (event) {
-        //                var selectedImage = event.target.files[0];
-        //                if (selectedImage) {
-        //                    uploadFileToRelativeDir(selectedImage);
-        //                }
-        //                input.remove();
-        //            });
-
-        //        input.click();
-        //    });
-
-        //    function uploadFileToRelativeDir(file) {
-        //        var formData = new FormData();
-        //        formData.append("file", file);
-
-        //        $.ajax({
-        //            type: "POST",
-        //            url: "test.aspx/UploadImage",
-        //            data: formData,
-        //            contentType: false,
-        //            processData: false,
-        //            dataType: "json",
-        //            success: function (response) {
-        //                console.log(response.d);
-        //            },
-        //            error: function () {
-        //                console.log("Error: Unable to upload image");
-        //            }
-        //        });
-        //    }
-
-        //})
         $(document).ready(function () {
-            var isShowPassword = false;
-            $("#btn_showPassword").click(function () {
-                isShowPassword = !isShowPassword;
-                if (isShowPassword) {
-                    $("#icn_showPassword_show").show();
-                    $("#icn_showPassword_hide").hide();
-                    $("#<%= tb_password.ClientID %>").attr("type", "text");
-
-                }
-                else {
-                    $("#icn_showPassword_show").hide();
-                    $("#icn_showPassword_hide").show();
-                    $("#<%= tb_password.ClientID %>").attr("type", "password");
-                }
-                $("#<%= tb_password.ClientID %>").focus();
+            // upload image to relative file handler
+            $(".icn-profilePictureHover").click(function () {
+                $("#<%= fu_imgUploadHandler.ClientID %>").click();
+            });
+            $("#<%= fu_imgUploadHandler.ClientID %>").change(function () {
+                $("#<%= btn_imgUploadHandler.ClientID %>").click();
             });
         })
     </script>

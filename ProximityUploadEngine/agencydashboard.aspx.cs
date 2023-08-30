@@ -9,6 +9,7 @@ namespace ProximityUploadEngine
             var master = (SiteMaster)this.Master;
             var agency = master.getAgencyFromSession();
 
+            master.setLblUsername(agency.name);
             lbl_username.Text = agency.name;
         }
     }
