@@ -11,6 +11,7 @@
         }
 
         .img-profile-picture-wrapper {
+            border: 2px solid black;
             position: relative;
             background-color: white;
             border-radius: 50%;
@@ -27,6 +28,9 @@
                 display: none;
             }
 
+            .img-profile-picture-wrapper img {
+                height: 100%;
+            }
 
         .icn-profile-picture {
             display: none;
@@ -49,67 +53,94 @@
             }
     </style>
     <main>
-        <div class="img-profile-picture-wrapper">
-            <asp:Image ID="img_profilePicture" runat="server" ImageUrl="/assets/images/user.png" />
-            <div class="icn-profile-picture">
-                <i class="fa fa-camera" aria-hidden="true"></i>
-                <span>Change photo</span>
-            </div>
+        <div id="hehe"></div>
+        <div id="huhu">
+            <asp:Image ID="Image1" runat="server" />
+            <asp:FileUpload ID="FileUpload1" runat="server" Style="display: none;" />
+            <asp:HiddenField ID="HiddenField1" runat="server" Value="/assets/images/user.png" />
         </div>
+
+        <asp:Button ID="btn_upload" runat="server" Text="Upload" CssClass="btn btn-primary" OnClick="UploadImage_Click" />
     </main>
     <script>
         $(document).ready(function () {
             // upload image to relative file handler
-            resizeFitImageInContainer($("#<%= img_profilePicture.ClientID %>"));
-            $(".img-profile-picture-wrapper").hover(
-                function () {
-                    $(".icn-profile-picture").css("display", "flex");
-                },
-                function () {
-                    $(".icn-profile-picture").css("display", "none");
-                }
-            );
-            $(".icn-profile-picture").click(function () {
-                console.log("hehe");
-                var input = $("<input>")
-                    .attr("type", "file").attr("accept", "image/*").attr("multiple", false)
-                    .change(function (event) {
-                        var selectedImage = event.target.files[0];
-                        if (selectedImage) {
-                            updateImageToContainer(selectedImage);
+            class HP_ProfilePicture {
+                constructor({ id, imgId, fileUploadId, imgSrc }) {
+                    const idElement = $("#" + id);
+                    const imgElement = imgId == null ? $('<img>').addClass('img-profile-picture') : $("#" + imgId);
+                    imgElement.attr('src', imgSrc);
+                    const icnWrapper = $('<div>').addClass('icn-profile-picture');
+                    const icn = $('<i>').addClass('fa fa-camera').attr('aria-hidden', 'true');
+                    const span = $('<span>').text('Change photo');
+
+                    icnWrapper.append(icn, span);
+                    idElement.append(imgElement, icnWrapper).addClass("img-profile-picture-wrapper");
+
+                    idElement.hover(
+                        function () {
+                            icnWrapper.css("display", "flex");
+                        },
+                        function () {
+                            icnWrapper.css("display", "none");
                         }
-                        input.remove();
+                    );
+                    icnWrapper.click(function () {
+                        var input = fileUploadId == null ? $("<input>") : $("#" + fileUploadId);
+                        input.attr("type", "file").attr("accept", "image/*").attr("multiple", false)
+                            .change(function (event) {
+                                var selectedImage = event.target.files[0];
+                                if (selectedImage) {
+                                    updateImageToContainer(selectedImage);
+                                }
+                                if (fileUploadId == null) {
+                                    input.remove();
+                                }
+                            });
+                        input.click();
                     });
-                input.click();
-            });
-            function updateImageToContainer(file) {
-                const imgProfilePicture = $("#<%= img_profilePicture.ClientID %>");
-                imgProfilePicture.attr("src", URL.createObjectURL(file));
+                    function updateImageToContainer(file) {
+                        imgElement.attr("src", URL.createObjectURL(file));
 
-                resizeFitImageInContainer(imgProfilePicture);
-                $(".icn-profile-picture").css("display", "none");
-            }
-            function resizeFitImageInContainer(imgElement) {
-                const image = new Image();
-                image.src = imgElement.attr("src");
-
-                image.onload = () => {
-                    const width = image.width;
-                    const height = image.height;
-
-                    if (width > height) {
-                        imgElement.css("height", "100%");
-                        imgElement.css("width", "auto");
+                        resizeFitImageInContainer();
+                        icnWrapper.css("display", "none"); // fix bug: won't end hover state after file upload
                     }
-                    else {
-                        imgElement.css("height", "auto");
-                        imgElement.css("width", "100%");
-                    }
+                    function resizeFitImageInContainer() {
+                        const image = new Image();
+                        image.src = imgElement.attr("src");
 
-                    URL.revokeObjectURL(imgElement.attr("src"));
-                    image.remove();
+                        image.onload = () => {
+                            const width = image.width;
+                            const height = image.height;
+
+                            if (width > height) {
+                                imgElement.css("height", "100%");
+                                imgElement.css("width", "auto");
+                            }
+                            else {
+                                imgElement.css("height", "auto");
+                                imgElement.css("width", "100%");
+                            }
+
+                            URL.revokeObjectURL(imgElement.attr("src"));
+                            image.remove();
+                        }
+                    }
+                    resizeFitImageInContainer();
                 }
-            }
+            };
+
+            var pp = new HP_ProfilePicture({
+                id: 'hehe',
+                imgSrc: '/assets/images/user.png',
+            });
+            var pupu = new HP_ProfilePicture({
+                id: 'huhu',
+                imgId: "<%= Image1.ClientID %>",
+                fileUploadId: "<%= FileUpload1.ClientID %>",
+                imgSrc: $("#<%= HiddenField1.ClientID %>").val(),
+            });
+
         });
     </script>
 </asp:Content>

@@ -14,38 +14,40 @@ namespace ProximityUploadEngine
         protected void Page_Load(object sender, EventArgs e)
         {
         }
-        //protected void UploadImage_Click(object sender, EventArgs e)
-        //{
-        //    if (fu_imgUploadHandler.HasFile)
-        //    {
-        //        string fileName = "profile_picture" + Path.GetExtension(fu_imgUploadHandler.FileName);
-        //        string rel_filePath = "/sources/profile_pictures/_test/" + fileName;
+        protected void UploadImage_Click(object sender, EventArgs e)
+        {
+            if (FileUpload1.HasFile)
+            {
+                string fileName = "profile_picture" + Path.GetExtension(FileUpload1.FileName);
+                string rel_filePath = "/sources/profile_pictures/_test/";
+                string abs_filePath = Server.MapPath("~" + rel_filePath);
 
-        //        updateImage(img_profilePicture, fileName, rel_filePath);
-        //    }
-        //}
-        //public void updateImage(Image img, string fileName, string rel_filePath)
-        //{
-        //    string abs_filePath = Server.MapPath("~" + rel_filePath);
-        //    fu_imgUploadHandler.SaveAs(abs_filePath);
+                try
+                {
+                    if (!Directory.Exists(abs_filePath))
+                    {
+                        Directory.CreateDirectory(abs_filePath);
+                    }
+                    else
+                    {
+                        string[] filesToDelete = Directory.GetFiles(abs_filePath);
+                        foreach (string fileToDelete in filesToDelete)
+                        {
+                            File.Delete(fileToDelete);
+                        }
+                    }
 
-        //    img.ImageUrl = rel_filePath;
-        //    using (System.Drawing.Image imgSrc = System.Drawing.Image.FromFile(abs_filePath))
-        //    {
-        //        int srcWidth = imgSrc.Width;
-        //        int srcHeight = imgSrc.Height;
-        //        if (srcHeight >= srcWidth)
-        //        {
-        //            img.Style["height"] = "auto";
-        //            img.Style["width"] = "100%";
-        //        }W
-        //        else
-        //        {
-        //            img.Style["width"] = "auto";
-        //            img.Style["height"] = "100%";
-        //        }
-        //    }
-        //}
+                    string fullFilePath = Path.Combine(abs_filePath, fileName);
+                    FileUpload1.SaveAs(fullFilePath);
+                    HiddenField1.Value = rel_filePath + fileName;
+                    Image1.ImageUrl = HiddenField1.Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            }
 
+        }
     }
 }
