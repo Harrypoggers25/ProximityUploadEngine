@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
-        .drop-wrapper {
+        .HP-drop-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,20 +16,20 @@
             cursor: pointer;
         }
 
-            .drop-wrapper .icn-drop {
+            .HP-drop-wrapper .HP-icn-drop {
                 font-size: 80px;
             }
 
-            .drop-wrapper .drop-messagePrompt {
+            .HP-drop-wrapper .HP-drop-messagePrompt {
                 font-size: 20px;
             }
 
-            .drop-wrapper .drop-messageError {
+            .HP-drop-wrapper .HP-drop-messageError {
                 display: none;
                 color: red;
             }
 
-            .drop-wrapper .drop-zone {
+            .HP-drop-wrapper .HP-drop-zone {
                 position: absolute;
                 width: inherit;
                 height: inherit;
@@ -37,99 +37,129 @@
             }
     </style>
     <main>
-        <div class="drop-wrapper">
-            <i class="fa fa-cloud-upload icn-drop" aria-hidden="true"></i>
-            <span class="drop-messagePrompt"></span>
-            <div class="drop-messageError">
-                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                <span>Invalid Video File: Please upload a valid video file.</span>
-            </div>
-            <div class="drop-zone"></div>
-        </div>
+        <div id="dropper1"></div>
     </main>
     <script>
         $(document).ready(function () {
-            const txt_messagePrompt = "Drag/Drop a file here or Upload from File";
-            const txt_onHover = "Open File Directory";
-            const txt_onDrag = "Drop File in Drop Zone";
-            const clr_onHover = "lightgrey";
-            const clr_offHover = "white";
+            class HP_FileDropper {
+                constructor({ id, txt_messagePrompt, txt_onHover, txt_onDrag, txt_messageError, clr_onHover, clr_offHover, onSuccess, onError }) {
+                    this.file = null;
+                    this.onSuccess = onSuccess == null ? function () { } : onSuccess;
+                    this.onError = onError == null ? function () { } : onError;
 
-            const dropwrapper = $('.drop-wrapper');
-            const dropZone = $('.drop-zone');
-            const icon = $('.drop-wrapper .icn-drop');
-            const messagePrompt = $('.drop-wrapper .drop-messagePrompt').text(txt_messagePrompt);
-            const messageError = $('.drop-wrapper .drop-messageError');
+                    this.txt_messagePrompt = txt_messagePrompt == null ? "" : txt_messagePrompt;
+                    this.txt_onHover = txt_onHover == null ? this.txt_messagePrompt : txt_onHover;
+                    this.txt_onDrag = txt_onDrag == null ? this.txt_messagePrompt : txt_onDrag;
+                    this.txt_messageError = txt_messageError == null ? "" : txt_messageError;
+                    this.clr_onHover = clr_onHover == null ? "transparent" : clr_onHover;
+                    this.clr_offHover = clr_offHover == null ? this.clr_onHover : clr_offHover;
 
-            // Drag and Drop Functions
-            dropZone.on('dragover', function (e) {
-                setBorder(e, "dashed", "black");
-                updateAttr('fa-cloud-upload', 'fa-chevron-circle-down', txt_onDrag, clr_onHover);
-            });
+                    this.idElement = $("#" + id).addClass("HP-drop-wrapper");
+                    this.dropwrapper = this.idElement;
+                    this.icon = $("<i>").addClass("fa fa-cloud-upload HP-icn-drop").attr('aria-hidden', 'true');
+                    this.messagePrompt = $("<span>").addClass("HP-drop-messagePrompt").text(txt_messagePrompt);
+                    this.messageErrorWrapper = $("<div>").addClass("HP-drop-messageError");
+                    this.iconError = $("<i>").addClass("fa fa-exclamation-circle").attr('aria-hidden', 'true');
+                    this.messageError = $("<span>").text(txt_messageError);
+                    this.dropZone = $("<div>").addClass("HP-drop-zone");
 
-            dropZone.on('dragleave', function (e) {
-                setBorder(e, "solid", "black");
-                updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', txt_messagePrompt, clr_offHover);
-            });
-            dropZone.on('drop', function (e) {
-                setBorder(e, "solid", "black");
-                updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', txt_messagePrompt, clr_offHover);
+                    this.messageErrorWrapper.append(this.iconError, this.messageError);
+                    this.dropwrapper.append(this.icon, this.messagePrompt, this.messageErrorWrapper, this.dropZone);
 
-                var file = e.originalEvent.dataTransfer.files[0];
-                handleFile(file);
-            });
-            function setBorder(e, style, color) {
-                e.preventDefault();
-                dropwrapper.css('border', '4px ' + style + ' ' + color);
-            }
-
-            // Click Functions
-            dropwrapper.click(function () {
-                updateAttr('fa-folder', 'fa-cloud-upload', txt_messagePrompt, clr_offHover);
-
-                var input = $("<input>");
-                input.attr("type", "file").attr("accept", "video/*").attr("multiple", false);
-                input.click()
-                    .change(function (event) {
-                        var file = event.target.files[0];
-                        handleFile(file);
+                    // Arrow functions to maintain 'this' context
+                    this.dropZone.on('dragover', (e) => {
+                        this.setBorder(e, "dashed", "black");
+                        this.updateAttr('fa-cloud-upload', 'fa-chevron-circle-down', this.txt_onDrag, this.clr_onHover);
                     });
-            });
 
-            // Hover Functions
-            dropwrapper.hover(
-                function () {
-                    updateAttr('fa-cloud-upload', 'fa-folder', txt_onHover, clr_onHover);
-                },
-                function () {
-                    updateAttr('fa-folder', 'fa-cloud-upload', txt_messagePrompt, clr_offHover);
-                }
-            )
-            function updateAttr(oldIconClass, newIconClass, newTextPrompt, newBgColor) {
-                icon.removeClass(oldIconClass).addClass(newIconClass);
-                if (newTextPrompt != null) {
-                    messagePrompt.text(newTextPrompt);
-                }
-                if (newBgColor != null) {
-                    dropwrapper.css("background-color", newBgColor);
-                }
-            }
+                    this.dropZone.on('dragleave', (e) => {
+                        this.setBorder(e, "solid", "black");
+                        this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
+                    });
 
-            // File Handler
-            function handleFile(file) {
-                if (!file.type.startsWith('video/')) {
-                    messageError.show();
-                }
-                else {
-                    messageError.hide();
+                    this.dropZone.on('drop', (e) => {
+                        this.setBorder(e, "solid", "black");
+                        this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
 
+                        var file = e.originalEvent.dataTransfer.files[0];
+                        this.handleFile(file);
+                    });
+
+                    // Arrow function for click event
+                    this.dropwrapper.click(() => {
+                        this.updateAttr('fa-folder', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
+
+                        var input = $("<input>");
+                        input.attr("type", "file").attr("accept", "video/*").attr("multiple", false);
+                        input.click()
+                            .change((event) => {
+                                var file = event.target.files[0];
+                                this.handleFile(file);
+                            });
+                    });
+
+                    // Arrow functions for hover event
+                    this.dropwrapper.hover(
+                        () => {
+                            this.updateAttr('fa-cloud-upload', 'fa-folder', this.txt_onHover, this.clr_onHover);
+                        },
+                        () => {
+                            this.updateAttr('fa-folder', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
+                        }
+                    );
+                }
+                setBorder(e, style, color) {
+                    e.preventDefault();
+                    this.dropwrapper.css('border', '4px ' + style + ' ' + color);
+                }
+                updateAttr(oldIconClass, newIconClass, newTextPrompt, newBgColor) {
+                    this.icon.removeClass(oldIconClass).addClass(newIconClass);
+                    if (newTextPrompt != null) {
+                        this.messagePrompt.text(newTextPrompt);
+                    }
+                    if (newBgColor != null) {
+                        this.dropwrapper.css("background-color", newBgColor);
+                    }
+                }
+                handleFile(file) {
+                    if (!file.type.startsWith('video/')) {
+                        this.messageErrorWrapper.show();
+                        this.onError();
+                    } else {
+                        this.messageErrorWrapper.hide();
+
+                        this.file = file;
+                        this.onSuccess();
+                    }
+                }
+                getFile() {
+                    return this.file;
+                }
+                readFile() {
                     var reader = new FileReader();
-                    reader.onload = function (e) {
+                    reader.onload = (e) => {
                         console.log('File data:', e.target.result);
+                        reader.remove();
                     };
-                    reader.readAsDataURL(file);
+                    reader.readAsDataURL(this.file);
                 }
             }
+
+            const dropper1 = new HP_FileDropper({
+                id: "dropper1",
+                txt_messagePrompt: "Drag/Drop a file here or Upload from File",
+                txt_onHover: "Open File Directory", // Use colons instead of equals for property assignments
+                txt_onDrag: "Drop File in Drop Zone",
+                txt_messageError: "Invalid Video File: Please upload a valid video file",
+                clr_onHover: "lightgrey",
+                clr_offHover: "white",
+                onSuccess: function () {
+                    console.log("hehe");
+                },
+                onError: function () {
+                    console.log("hoho");
+                }
+            });
         });
     </script>
 </asp:Content>
