@@ -96,15 +96,10 @@
 
         .error-message {
             display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
             text-align: center;
+            margin-top: 10px;
+            font-size: 16px;
+            color: green;
         }
 
         .success-message {
@@ -269,17 +264,14 @@
 
         function handleDragOver(event) {
             event.preventDefault();
-            event.currentTarget.classList.add('dragover');
         }
 
         function handleDragLeave(event) {
             event.preventDefault();
-            event.currentTarget.classList.remove('dragover');
         }
 
         function handleDrop(event) {
             event.preventDefault();
-            event.currentTarget.classList.remove('dragover');
 
             const droppedFiles = event.dataTransfer.files;
             if (droppedFiles.length > 0) {
@@ -362,12 +354,10 @@
                     box.style.display = 'flex';
                 });
 
+                videoPreview.remove();
+
                 // Clear background music and reset video after a delay
                 setTimeout(function () {
-                    videoPreview.pause();
-                    videoPreview.currentTime = 0;
-                    videoPreview.src = "";
-                    resetVideoPreview();
                     successMessage.style.display = 'none'; // Hide the success message
                     location.reload(); // Refresh the page after 10 seconds
                 }, 3000); // 10 seconds in milliseconds
