@@ -443,6 +443,12 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\HP_Scripts\HP_FileDropper.css" />
+    <Content Include="Scripts\HP_Scripts\HP_FileDropper.js" />
+    <Content Include="Scripts\HP_Scripts\HP_ProfilePicture.css" />
+    <Content Include="Scripts\HP_Scripts\HP_ProfilePicture.js" />
+    <Content Include="Scripts\HP_Scripts\HP_VideoPreview.css" />
+    <Content Include="Scripts\HP_Scripts\HP_VideoPreview.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -473,6 +479,7 @@
     <Content Include="Site.Master" />
     <Content Include="svg\Vision-Four.svg" />
     <Content Include="test.aspx" />
+    <Content Include="tested.aspx" />
     <Content Include="userdashboard.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
@@ -536,6 +543,13 @@
     </Compile>
     <Compile Include="test.aspx.designer.cs">
       <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="tested.aspx.cs">
+      <DependentUpon>tested.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="tested.aspx.designer.cs">
+      <DependentUpon>tested.aspx</DependentUpon>
     </Compile>
     <Compile Include="userdashboard.aspx.cs">
       <DependentUpon>userdashboard.aspx</DependentUpon>

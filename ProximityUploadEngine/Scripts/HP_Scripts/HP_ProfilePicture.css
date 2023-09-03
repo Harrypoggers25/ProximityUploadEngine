@@ -1,0 +1,49 @@
+﻿.HP-ProfileProfile, .HP-icn-profile-picture {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.HP-ProfileProfile {
+    border: 2px solid black;
+    position: relative;
+    background-color: white;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    width: 150px;
+    overflow: hidden;
+}
+
+    .HP-ProfileProfile > * {
+        position: absolute;
+    }
+
+    .HP-ProfileProfile input {
+        display: none;
+    }
+
+    .HP-ProfileProfile img {
+        height: 100%;
+    }
+
+.HP-icn-profile-picture {
+    display: none;
+    aspect-ratio: 1;
+    width: 100%;
+    background: rgba(50, 50, 50, 0.9);
+    color: lightgray;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: display ease;
+}
+
+    .HP-icn-profile-picture i {
+        font-size: 40px;
+    }
+
+    .HP-icn-profile-picture span {
+        font-size: 17px;
+        font-weight: 600;
+    }

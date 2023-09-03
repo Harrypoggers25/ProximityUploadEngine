@@ -2,164 +2,155 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
-        .HP-drop-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            width: 300px;
-            height: 300px;
-            border: 4px solid black;
-            border-radius: 15px;
-            text-align: center;
-            padding: 20px;
-            cursor: pointer;
+        .HP-ProfilePicture,
+        .HP-ProfilePicture .HP-Background-Wrapper,
+        .HP-ProfilePicture .HP-Background-Wrapper > * {
+            border-radius: 50%;
         }
 
-            .HP-drop-wrapper .HP-icn-drop {
-                font-size: 80px;
+            .HP-ProfilePicture,
+            .HP-ProfilePicture .HP-Background-Wrapper,
+            .HP-ProfilePicture .HP-Hover-Wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
-            .HP-drop-wrapper .HP-drop-messagePrompt {
+        .HP-ProfilePicture {
+            width: 200px;
+            height: 200px;
+            background-color: black;
+        }
+
+            .HP-ProfilePicture input {
+                display: none;
+            }
+
+            .HP-ProfilePicture .HP-Background-Wrapper {
+                position: relative;
+                width: 97%;
+                height: 97%;
+                background-color: white;
+            }
+
+                .HP-ProfilePicture .HP-Background-Wrapper > * {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .HP-ProfilePicture .HP-Image-Wrapper {
+                overflow: hidden;
+            }
+
+                .HP-ProfilePicture .HP-Image-Wrapper .HP-Image {
+                    position: absolute;
+                    opacity: 1;
+                }
+
+            .HP-ProfilePicture .HP-Hover-Background {
+                background: black;
+            }
+
+            .HP-ProfilePicture .HP-Hover-Wrapper {
+                flex-direction: column;
+                color: white;
                 font-size: 20px;
             }
 
-            .HP-drop-wrapper .HP-drop-messageError {
-                display: none;
-                color: red;
-            }
+                .HP-ProfilePicture .HP-Hover-Wrapper .HP-Icn-Hover {
+                    font-size: 35px;
+                }
 
-            .HP-drop-wrapper .HP-drop-zone {
-                position: absolute;
-                width: inherit;
-                height: inherit;
-                border-radius: inherit;
+            .HP-ProfilePicture .HP-Clickable {
+                opacity: 0;
+                transition: opacity ease 0.20s;
+                cursor: pointer;
             }
     </style>
     <main>
-        <div id="dropper1"></div>
+        <div class="HP-ProfilePicture">
+            <div class="HP-Background-Wrapper">
+                <div class="HP-Image-Wrapper">
+                    <img class="HP-Image" src="https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" />
+                    <%--<img class="HP-Image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPb_zOl9FwPdKM7B4DvrpR1q-XRZ-my14M9w&usqp=CAU" />--%>
+                </div>
+                <div class="HP-Hover-Background HP-Clickable"></div>
+                <div class="HP-Hover-Wrapper HP-Clickable">
+                    <i class="fa fa-camera HP-Icn-Hover" aria-hidden="true"></i>
+                    <span class="HP-Txt-Hover">Change Photo</span>
+                </div>
+            </div>
+        </div>
     </main>
     <script>
         $(document).ready(function () {
-            class HP_FileDropper {
-                constructor({ id, txt_messagePrompt, txt_onHover, txt_onDrag, txt_messageError, clr_onHover, clr_offHover, onSuccess, onError }) {
-                    this.file = null;
-                    this.onSuccess = onSuccess == null ? function () { } : onSuccess;
-                    this.onError = onError == null ? function () { } : onError;
 
-                    this.txt_messagePrompt = txt_messagePrompt == null ? "" : txt_messagePrompt;
-                    this.txt_onHover = txt_onHover == null ? this.txt_messagePrompt : txt_onHover;
-                    this.txt_onDrag = txt_onDrag == null ? this.txt_messagePrompt : txt_onDrag;
-                    this.txt_messageError = txt_messageError == null ? "" : txt_messageError;
-                    this.clr_onHover = clr_onHover == null ? "transparent" : clr_onHover;
-                    this.clr_offHover = clr_offHover == null ? this.clr_onHover : clr_offHover;
+            var url = null;
+            const rect1 = { x: 0, y: 0, w: 450, h: 450 }
 
-                    this.idElement = $("#" + id).addClass("HP-drop-wrapper");
-                    this.dropwrapper = this.idElement;
-                    this.icon = $("<i>").addClass("fa fa-cloud-upload HP-icn-drop").attr('aria-hidden', 'true');
-                    this.messagePrompt = $("<span>").addClass("HP-drop-messagePrompt").text(txt_messagePrompt);
-                    this.messageErrorWrapper = $("<div>").addClass("HP-drop-messageError");
-                    this.iconError = $("<i>").addClass("fa fa-exclamation-circle").attr('aria-hidden', 'true');
-                    this.messageError = $("<span>").text(txt_messageError);
-                    this.dropZone = $("<div>").addClass("HP-drop-zone");
+            setImageRect(rect1);
 
-                    this.messageErrorWrapper.append(this.iconError, this.messageError);
-                    this.dropwrapper.append(this.icon, this.messagePrompt, this.messageErrorWrapper, this.dropZone);
+            $(".HP-Image").hide();
+            $(".HP-Image").fadeIn(500);
 
-                    // Arrow functions to maintain 'this' context
-                    this.dropZone.on('dragover', (e) => {
-                        this.setBorder(e, "dashed", "black");
-                        this.updateAttr('fa-cloud-upload', 'fa-chevron-circle-down', this.txt_onDrag, this.clr_onHover);
-                    });
-
-                    this.dropZone.on('dragleave', (e) => {
-                        this.setBorder(e, "solid", "black");
-                        this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
-                    });
-
-                    this.dropZone.on('drop', (e) => {
-                        this.setBorder(e, "solid", "black");
-                        this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
-
-                        var file = e.originalEvent.dataTransfer.files[0];
-                        this.handleFile(file);
-                    });
-
-                    // Arrow function for click event
-                    this.dropwrapper.click(() => {
-                        this.updateAttr('fa-folder', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
-
-                        var input = $("<input>");
-                        input.attr("type", "file").attr("accept", "video/*").attr("multiple", false);
-                        input.click()
-                            .change((event) => {
-                                var file = event.target.files[0];
-                                this.handleFile(file);
-                            });
-                    });
-
-                    // Arrow functions for hover event
-                    this.dropwrapper.hover(
-                        () => {
-                            this.updateAttr('fa-cloud-upload', 'fa-folder', this.txt_onHover, this.clr_onHover);
-                        },
-                        () => {
-                            this.updateAttr('fa-folder', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
-                        }
-                    );
+            function updateImage(file) {
+                if (url != null) {
+                    URL.revokeObjectURL(url);
                 }
-                setBorder(e, style, color) {
-                    e.preventDefault();
-                    this.dropwrapper.css('border', '4px ' + style + ' ' + color);
-                }
-                updateAttr(oldIconClass, newIconClass, newTextPrompt, newBgColor) {
-                    this.icon.removeClass(oldIconClass).addClass(newIconClass);
-                    if (newTextPrompt != null) {
-                        this.messagePrompt.text(newTextPrompt);
-                    }
-                    if (newBgColor != null) {
-                        this.dropwrapper.css("background-color", newBgColor);
-                    }
-                }
-                handleFile(file) {
-                    if (!file.type.startsWith('video/')) {
-                        this.messageErrorWrapper.show();
-                        this.onError();
-                    } else {
-                        this.messageErrorWrapper.hide();
-
-                        this.file = file;
-                        this.onSuccess();
-                    }
-                }
-                getFile() {
-                    return this.file;
-                }
-                readFile() {
-                    var reader = new FileReader();
-                    reader.onload = (e) => {
-                        console.log('File data:', e.target.result);
-                        reader.remove();
-                    };
-                    reader.readAsDataURL(this.file);
+                url = URL.createObjectURL(file);
+                loadImageFromUrl(url);
+            }
+            function loadImageFromUrl(url) {
+                $(".HP-Image")[0].src = url;
+                $(".HP-Image")[0].onload = function () {
+                    const w = $(".HP-Image")[0].naturalWidth;
+                    const h = $(".HP-Image")[0].naturalHeight;
+                    const k = h > w ? w : h;
+                    const x = w / 2 - k / 2;
+                    const y = h / 2 - k / 2;
+                    const rect2 = { x: x, y: y, w: k, h: k };
+                    setImageRect(rect2);
                 }
             }
+            function setImageRect(rect) {
+                const kw = $(".HP-Image-Wrapper").width() / rect.w;
+                const kh = $(".HP-Image-Wrapper").height() / rect.h;
+                const rw = $(".HP-Image")[0].naturalWidth * kw;
+                const rh = $(".HP-Image")[0].naturalHeight * kh;
+                const rx = rect.x * kw;
+                const ry = rect.y * kh;
 
-            const dropper1 = new HP_FileDropper({
-                id: "dropper1",
-                txt_messagePrompt: "Drag/Drop a file here or Upload from File",
-                txt_onHover: "Open File Directory", // Use colons instead of equals for property assignments
-                txt_onDrag: "Drop File in Drop Zone",
-                txt_messageError: "Invalid Video File: Please upload a valid video file",
-                clr_onHover: "lightgrey",
-                clr_offHover: "white",
-                onSuccess: function () {
-                    console.log("hehe");
+                $(".HP-Image").css({
+                    "transform": "translate(" + -rx + "px, " + -ry + "px)",
+                    "width": (rw) + "px",
+                    "height": (rh) + "px"
+                });
+            }
+            $(".HP-Clickable").hover(
+                function () {
+                    $(".HP-Hover-Background").css("opacity", "0.7");
+                    $(".HP-Hover-Wrapper").css("opacity", "1");
                 },
-                onError: function () {
-                    console.log("hoho");
+                function () {
+                    $(".HP-Hover-Background").css("opacity", "0");
+                    $(".HP-Hover-Wrapper").css("opacity", "0");
                 }
+            );
+            $(".HP-Clickable").click(function () {
+                const input = $("<input>")
+                    .attr("type", "file").attr("accept", "image/*").attr("multiple", false)
+                    .click()
+                    .change((event) => {
+                        const file = event.target.files[0];
+                        if (file == null ? false : file.type.startsWith("image/")) {
+                            updateImage(file);
+                        }
+                        input.remove();
+                        $(".HP-Clickable").css("opacity", "0");
+                    });
             });
-        });
+        })
     </script>
+
 </asp:Content>
