@@ -1,71 +1,87 @@
-﻿class HP_Rect {
-    constructor(x = 0, y = 0, w = 0, h = 0) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-    }
-}
-class HP_ProfilePicture {
-    constructor(mainElement, { imgId, fileUploadId, imgSrc, fadeIn = false } = {}) {
-        this.mainElement = $(mainElement);
-        this.imgElement = imgId == null ? $('<img>').addClass('HP-img-profile-picture') : $("#" + imgId);
-        this.icnWrapper = $('<div>').addClass('HP-icn-profile-picture');
-        this.icn = $('<i>').addClass('fa fa-camera').attr('aria-hidden', 'true');
-        this.span = $('<span>').text('Change photo');
-        this.icnWrapper.append(this.icn, this.span);
-        this.mainElement.append(this.imgElement, this.icnWrapper).addClass("HP-ProfileProfile");
+﻿class HP_ProfilePicture {
+    constructor(mainElement, { text = 'Change photo', fadeIn = false, src = "https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" } = {}) {
+        this.mainElement = $(mainElement).addClass("HP-ProfilePicture");
+        this.bgWrapper = $("<div>").addClass("HP-Background-Wrapper");
+        this.imageWrapper = $("<div>").addClass("HP-Image-Wrapper");
+        this.image = $("<img>").addClass("HP-Image").attr("src", src);
+        this.hoverbg = $("<div>").addClass("HP-Hover-Background HP-Clickable");
+        this.hoverWrapper = $("<div>").addClass("HP-Hover-Wrapper HP-Clickable");
+        this.icn_hover = $("<i>").addClass("fa fa-camera HP-Icn-Hover").attr('aria-hidden', 'true');
+        this.txt_hover = $("<span>").addClass("HP-Txt-Hover").text(text);
 
-        this.imgElement[0].src = imgSrc == null ? "https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" : imgSrc;
-        this.resizeFitImageInContainer();
+        this.imageWrapper.append(this.image);
+        this.hoverWrapper.append(this.icn_hover, this.txt_hover);
+        this.bgWrapper.append(this.imageWrapper, this.hoverbg, this.hoverWrapper);
+        this.mainElement.append(this.bgWrapper);
+
+        this.clickable = $(".HP-Clickable");
+
+        this.url = null;
+        this.image[0].onload = () => {
+            this.setImageRect({ x: 0, y: 0, w: 450, h: 450 });
+        };
+
         if (fadeIn) {
-            this.imgElement.hide();
-            this.imgElement.fadeIn(1000);
+            this.image.hide();
+            this.image.fadeIn(500);
         }
 
-        this.mainElement.hover(
+
+        this.clickable.hover(
             () => {
-                this.icnWrapper.css("display", "flex");
+                this.hoverbg.css("opacity", "0.7");
+                this.hoverWrapper.css("opacity", "1");
             },
             () => {
-                this.icnWrapper.css("display", "none");
+                this.hoverbg.css("opacity", "0");
+                this.hoverWrapper.css("opacity", "0");
             }
         );
-        this.icnWrapper.click(() => {
-            this.input = fileUploadId == null ? $("<input>") : $("#" + fileUploadId);
-            this.input.attr("type", "file").attr("accept", "image/*").attr("multiple", false)
+        this.clickable.click(() => {
+            const input = $("<input>")
+                .attr("type", "file").attr("accept", "image/*").attr("multiple", false)
+                .click()
                 .change((event) => {
-                    const selectedImage = event.target.files[0];
-                    if (selectedImage) {
-                        this.updateImage(selectedImage);
+                    const file = event.target.files[0];
+                    if (file && file.type.startsWith("image/")) {
+                        this.updateImage(file);
                     }
-                    if (fileUploadId == null) {
-                        this.input.remove();
-                    }
+                    input.remove();
+                    this.clickable.css("opacity", "0");
                 });
-            this.input.click();
         });
     }
     updateImage(file) {
-        if (this.imgElement[0].src != "") {
-            URL.revokeObjectURL(this.imgElement[0].src);
+        if (this.url != null) {
+            URL.revokeObjectURL(this.url);
         }
-        this.imgElement[0].src = URL.createObjectURL(file);
-        this.resizeFitImageInContainer();
-        this.icnWrapper.css("display", "none"); // fix bug: won't end hover state after file upload
+        this.url = URL.createObjectURL(file);
+        this.loadImageFromUrl(this.url);
     }
-    resizeFitImageInContainer() {
-        this.imgElement[0].onload = () => {
-            const width = this.imgElement[0].width;
-            const height = this.imgElement[0].height;
-            if (width > height) {
-                this.imgElement.css("height", "100%");
-                this.imgElement.css("width", "auto");
-            }
-            else {
-                this.imgElement.css("height", "auto");
-                this.imgElement.css("width", "100%");
-            }
-        }
+    loadImageFromUrl(url) {
+        this.image[0].onload = () => {
+            const w = this.image[0].naturalWidth;
+            const h = this.image[0].naturalHeight;
+            const k = h > w ? w : h;
+            const x = w / 2 - k / 2;
+            const y = h / 2 - k / 2;
+
+            this.setImageRect({ x: x, y: y, w: k, h: k });
+        };
+        this.image[0].src = url;
     }
-};
+    setImageRect(rect) {
+        const kw = this.imageWrapper.width() / rect.w;
+        const kh = this.imageWrapper.height() / rect.h;
+        const rw = this.image[0].naturalWidth * kw;
+        const rh = this.image[0].naturalHeight * kh;
+        const rx = rect.x * kw;
+        const ry = rect.y * kh;
+
+        this.image.css({
+            "transform": "translate(" + -rx + "px, " + -ry + "px)",
+            "width": rw + "px",
+            "height": rh + "px"
+        });
+    }
+}

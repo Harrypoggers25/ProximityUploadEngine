@@ -1,155 +1,356 @@
 ﻿<%@ Page Title="Test Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="test.aspx.cs" Inherits="ProximityUploadEngine.test" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <link rel="stylesheet" href="Scripts/HP_Scripts/HP_ProfilePicture.css" />
     <style>
-        .HP-ProfilePicture,
-        .HP-ProfilePicture .HP-Background-Wrapper,
-        .HP-ProfilePicture .HP-Background-Wrapper > * {
-            border-radius: 50%;
-        }
-
-            .HP-ProfilePicture,
-            .HP-ProfilePicture .HP-Background-Wrapper,
-            .HP-ProfilePicture .HP-Hover-Wrapper {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-        .HP-ProfilePicture {
-            width: 200px;
-            height: 200px;
+        .HP-Cropper {
             background-color: black;
+            aspect-ratio: 16/9;
+            height: 400px;
         }
 
-            .HP-ProfilePicture input {
-                display: none;
-            }
-
-            .HP-ProfilePicture .HP-Background-Wrapper {
+            .HP-Cropper .HP-Crop-Image-Wrapper {
                 position: relative;
-                width: 97%;
-                height: 97%;
-                background-color: white;
-            }
-
-                .HP-ProfilePicture .HP-Background-Wrapper > * {
-                    position: absolute;
-                    width: 100%;
-                    height: 100%;
-                }
-
-            .HP-ProfilePicture .HP-Image-Wrapper {
+                width: 100%;
+                height: 100%;
                 overflow: hidden;
             }
 
-                .HP-ProfilePicture .HP-Image-Wrapper .HP-Image {
+            .HP-Cropper .HP-Crop-Image {
+                height: 100%;
+                outline: 2px dotted rgba(255,255,255,0.5);
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                /*display: none;*/
+            }
+
+            .HP-Cropper .HP-Crop-Box {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                aspect-ratio: 1;
+                height: 100%;
+                /*width: 1px;*/
+                background-color: dimgrey;
+                opacity: 0.7;
+                outline: 2px dashed white;
+                overflow: hidden;
+                pointer-events: none;
+                touch-action: none;
+            }
+
+                .HP-Cropper .HP-Crop-Box::after,
+                .HP-Cropper .HP-Crop-Box::before {
+                    content: "";
                     position: absolute;
-                    opacity: 1;
+                    border: 2px dashed white;
                 }
 
-            .HP-ProfilePicture .HP-Hover-Background {
-                background: black;
-            }
-
-            .HP-ProfilePicture .HP-Hover-Wrapper {
-                flex-direction: column;
-                color: white;
-                font-size: 20px;
-            }
-
-                .HP-ProfilePicture .HP-Hover-Wrapper .HP-Icn-Hover {
-                    font-size: 35px;
+                .HP-Cropper .HP-Crop-Box::after {
+                    width: 120%;
+                    height: 33.33%;
                 }
 
-            .HP-ProfilePicture .HP-Clickable {
-                opacity: 0;
-                transition: opacity ease 0.20s;
-                cursor: pointer;
-            }
+                .HP-Cropper .HP-Crop-Box::before {
+                    height: 120%;
+                    width: 33.33%;
+                }
     </style>
     <main>
-        <div class="HP-ProfilePicture">
-            <div class="HP-Background-Wrapper">
-                <div class="HP-Image-Wrapper">
-                    <img class="HP-Image" src="https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" />
-                    <%--<img class="HP-Image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPb_zOl9FwPdKM7B4DvrpR1q-XRZ-my14M9w&usqp=CAU" />--%>
-                </div>
-                <div class="HP-Hover-Background HP-Clickable"></div>
-                <div class="HP-Hover-Wrapper HP-Clickable">
-                    <i class="fa fa-camera HP-Icn-Hover" aria-hidden="true"></i>
-                    <span class="HP-Txt-Hover">Change Photo</span>
-                </div>
+        <div id="picture1" class="HP-ProfilePicture"></div>
+        <div id="cropper1" class="HP-Cropper"></div>
+        <%--<div class="HP-Cropper">
+            <div class="HP-Crop-Image-Wrapper">
+                <img class="HP-Crop-Image" src="https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" />
+                <img class="HP-Crop-Image" src="/assets/images/test.png" />
+                <div class="HP-Crop-Box"></div>
             </div>
-        </div>
+        </div>--%>
     </main>
+    <script src="Scripts/HP_Scripts/HP_ProfilePicture.js"></script>
     <script>
         $(document).ready(function () {
+            const picture1 = new HP_ProfilePicture("#picture1", { fadeIn: true });
+            class HP_Cropper {
+                constructor(mainElement, { src } = {}) {
+                    this.mainElement = $(mainElement).addClass("HP-Cropper");
+                    this.wrapper = $("<div>").addClass("HP-Crop-Image-Wrapper");
+                    this.image = $("<img>").addClass("HP-Crop-Image").attr("src", src);
+                    this.box = $("<div>").addClass("HP-Crop-Box");
 
-            var url = null;
-            const rect1 = { x: 0, y: 0, w: 450, h: 450 }
+                    this.wrapper.append(this.image, this.box);
+                    this.mainElement.append(this.wrapper);
 
-            setImageRect(rect1);
+                    this.resizeElement(this.box);
+                    this.recenterElement(this.box);
 
-            $(".HP-Image").hide();
-            $(".HP-Image").fadeIn(500);
+                    this.resizeElement(this.image);
+                    this.recenterElement(this.image)
 
-            function updateImage(file) {
-                if (url != null) {
-                    URL.revokeObjectURL(url);
-                }
-                url = URL.createObjectURL(file);
-                loadImageFromUrl(url);
-            }
-            function loadImageFromUrl(url) {
-                $(".HP-Image")[0].src = url;
-                $(".HP-Image")[0].onload = function () {
-                    const w = $(".HP-Image")[0].naturalWidth;
-                    const h = $(".HP-Image")[0].naturalHeight;
-                    const k = h > w ? w : h;
-                    const x = w / 2 - k / 2;
-                    const y = h / 2 - k / 2;
-                    const rect2 = { x: x, y: y, w: k, h: k };
-                    setImageRect(rect2);
-                }
-            }
-            function setImageRect(rect) {
-                const kw = $(".HP-Image-Wrapper").width() / rect.w;
-                const kh = $(".HP-Image-Wrapper").height() / rect.h;
-                const rw = $(".HP-Image")[0].naturalWidth * kw;
-                const rh = $(".HP-Image")[0].naturalHeight * kh;
-                const rx = rect.x * kw;
-                const ry = rect.y * kh;
+                    // constant relative values
+                    this.rw = this.image[0].width;
+                    this.rh = this.image[0].height;
+                    // constant actual values
+                    this.aw = this.image[0].naturalWidth;
+                    this.ah = this.image[0].naturalHeight;
 
-                $(".HP-Image").css({
-                    "transform": "translate(" + -rx + "px, " + -ry + "px)",
-                    "width": (rw) + "px",
-                    "height": (rh) + "px"
-                });
-            }
-            $(".HP-Clickable").hover(
-                function () {
-                    $(".HP-Hover-Background").css("opacity", "0.7");
-                    $(".HP-Hover-Wrapper").css("opacity", "1");
-                },
-                function () {
-                    $(".HP-Hover-Background").css("opacity", "0");
-                    $(".HP-Hover-Wrapper").css("opacity", "0");
-                }
-            );
-            $(".HP-Clickable").click(function () {
-                const input = $("<input>")
-                    .attr("type", "file").attr("accept", "image/*").attr("multiple", false)
-                    .click()
-                    .change((event) => {
-                        const file = event.target.files[0];
-                        if (file == null ? false : file.type.startsWith("image/")) {
-                            updateImage(file);
+                    this.ratio = this.aw / this.rw;
+                    this.rk = 0;
+
+                    this.image.draggable({ drag: (event, ui) => { this.edgeBound(event, ui); } });
+                    this.wrapper.hover(
+                        () => {
+                            $('body').css('overflow', 'hidden');
+                        },
+                        () => {
+                            $('body').css('overflow', 'auto');
                         }
-                        input.remove();
-                        $(".HP-Clickable").css("opacity", "0");
+                    );
+                    this.wrapper.on("wheel", (event) => {
+                        var drk = event.originalEvent.deltaY * -0.01 * 2;
+                        if (this.rk + drk <= 0) {
+                            this.rk = 0;
+                            drk = 0;
+                        }
+                        else {
+                            this.rk += drk;
+                        }
+                        this.edgeBound();
+
+                        this.setImageSize(this.rk + this.rw, this.rk + this.rh);
+                        this.setPos(this.image, this.getLeft(this.image) - drk / 2, this.getTop(this.image) - drk / 2)
+                        //printInfo();
                     });
-            });
+                }
+                getRect() {
+                    const rx = Math.round(this.getLeft(this.image) - this.getLeft(this.box));
+                    const ry = Math.round(this.getTop(this.image) - this.getTop(this.box));
+
+                    const ak = this.ratio * this.rk;
+                    const ax = Math.round(this.ratio * rx);
+                    const ay = Math.round(this.ratio * ry);
+
+                    const bw = this.box.width() * this.box.width() / (this.rw + this.rk);
+                    const bh = this.box.height() * this.box.height() / (this.rh + this.rk);
+                    const x = -Math.round(this.aw / (this.aw + ak) * ax);
+                    const y = -Math.round(this.aw / (this.aw + ak) * ay);
+
+                    return { x: x, y: y, w: bw, h: bh };
+                }
+                getLeft(element) {
+                    return element.position().left;
+                }
+                getTop(element) {
+                    return element.position().top;
+                }
+                setPos(element, x, y) {
+                    element.css({ "left": `${x}px`, "top": `${y}px` });
+                }
+                setImageSize(w, h) {
+                    this.image.css({ "width": `${w}px`, "height": `${h}px` });
+                }
+                recenterElement(element) {
+                    this.setPos(element, (this.wrapper.width() - element.width()) / 2, (this.wrapper.height() - element.height()) / 2);
+                    element.css("transform", "none");
+                };
+                resizeElement(element) {
+                    element.css({ "width": `${element.width() - 4}px`, "height": `${element.height() - 4}px` });
+                }
+                edgeBound(event = null, ui = null) {
+                    const dw = this.getLeft(this.box) - this.image[0].width + this.box.width();
+                    const dh = this.getTop(this.box) - this.image[0].height + this.box.height();
+
+                    if (event == null && ui == null) {
+                        var top = this.getTop(this.image) > this.getTop(this.box) ? this.getTop(this.box) : this.getTop(this.image) < dh ? dh : this.getTop(this.image);
+                        var left = this.getLeft(this.image) > this.getLeft(this.box) ? this.getLeft(this.box) : this.getLeft(this.image) < dw ? dw : this.getLeft(this.image);
+                        this.setPos(this.image, left, top);
+                    }
+                    else {
+                        ui.position.top = ui.position.top > this.getTop(this.box) ? this.getTop(this.box) : ui.position.top < dh ? dh : ui.position.top;
+                        ui.position.left = ui.position.left > this.getLeft(this.box) ? this.getLeft(this.box) : ui.position.left < dw ? dw : ui.position.left;
+                    }
+
+                    //printInfo();
+                }
+                printInfo() {
+                    const rx = Math.round(this.getLeft(this.image) - this.getLeft(this.box));
+                    const ry = Math.round(this.getTop(this.image) - this.getTop(this.box));
+
+                    const ak = this.ratio * this.rk;
+                    const ax = Math.round(this.ratio * rx);
+                    const ay = Math.round(this.ratio * ry);
+
+                    const bw = this.box.width() * this.box.width() / (this.rw + this.rk);
+                    const bh = this.box.height() * this.box.height() / (this.rh + this.rk);
+                    const x = -Math.round(this.aw / (this.aw + ak) * ax);
+                    const y = -Math.round(this.aw / (this.aw + ak) * ay);
+
+                    console.clear();
+                    console.log(`Box\n\n` +
+                        `ak: ${ak}\n\n` +
+                        `Actual\n` +
+                        `Width: ${bw}\n` +
+                        `Height: ${bh}\n` +
+                        `x: ${x}\n` +
+                        `y: ${y}\n\n`);
+                    console.log(`Image\n\n` +
+                        `rk: ${this.rk}\n\n` +
+                        `Actual\n` +
+                        `Width: ${this.aw}\n` +
+                        `Height: ${this.ah}\n` +
+                        `x: ${x}\n` +
+                        `y: ${y}\n\n` +
+                        `Absolute\n` +
+                        `Width: ${this.aw + ak}\n` +
+                        `Height: ${this.ah + ak}\n` +
+                        `x: ${ax}\n` +
+                        `y: ${ay}\n\n` +
+                        `Relative\n` +
+                        `Width: ${this.rw + this.rk}\n` +
+                        `Height: ${this.rh + this.rk}\n` +
+                        `x: ${rx}\n` +
+                        `y: ${ry}\n\n`);
+                }
+            }
+            const cropper = new HP_Cropper("#cropper1", {
+                src: "/assets/images/test.png"
+            })
+            //const box = $(".HP-Crop-Box");
+            //resizeElement(box);
+            //recenterElement(box);
+            //const image = $(".HP-Crop-Image");
+            //resizeElement(image);
+            //recenterElement(image)
+
+            //// relative values
+            //const rw = image[0].width;
+            //const rh = image[0].height;
+            //// actual values
+            //const aw = image[0].naturalWidth;
+            //const ah = image[0].naturalHeight;
+
+            //const ratioAR = aw / rw;
+            //var rk = 0;
+
+            //image.draggable({ drag: function (event, ui) { edgeBound(event, ui); } });
+            //$(".HP-Crop-Image-Wrapper").hover(
+            //    function () {
+            //        $('body').css('overflow', 'hidden');
+            //    },
+            //    function () {
+            //        $('body').css('overflow', 'auto');
+            //    }
+            //);
+            //$(".HP-Crop-Image-Wrapper").on("wheel", function (event) {
+            //    var drk = event.originalEvent.deltaY * -0.01 * 2;
+            //    image.off("drag");
+            //    if (rk + drk <= 0) {
+            //        rk = 0;
+            //        drk = 0;
+            //    }
+            //    else {
+            //        rk += drk;
+            //    }
+            //    edgeBound();
+
+            //    setImageSize(rk + rw, rk + rh);
+            //    setPos(image, getLeft(image) - drk / 2, getTop(image) - drk / 2)
+            //    //printInfo();
+            //});
+            //function getRect() {
+            //    const rx = Math.round(getLeft(image) - getLeft(box));
+            //    const ry = Math.round(getTop(image) - getTop(box));
+
+            //    const ak = ratioAR * rk;
+            //    const ax = Math.round(ratioAR * rx);
+            //    const ay = Math.round(ratioAR * ry);
+
+            //    const bw = box.width() * box.width() / (rw + rk);
+            //    const bh = box.height() * box.height() / (rh + rk);
+            //    const x = -Math.round(aw / (aw + ak) * ax);
+            //    const y = -Math.round(aw / (aw + ak) * ay);
+
+            //    return { x: x, y: y, w: bw, h: bh };
+            //}
+            //function getLeft(element) {
+            //    return element.position().left;
+            //}
+            //function getTop(element) {
+            //    return element.position().top;
+            //}
+            //function setPos(element, x, y) {
+            //    element.css({ "left": `${x}px`, "top": `${y}px` });
+            //}
+            //function setImageSize(w, h) {
+            //    image.css({ "width": `${w}px`, "height": `${h}px` });
+            //}
+            //function recenterElement(element) {
+            //    setPos(element, ($(".HP-Crop-Image-Wrapper").width() - element.width()) / 2, ($(".HP-Crop-Image-Wrapper").height() - element.height()) / 2);
+            //    element.css("transform", "none");
+            //};
+            //function resizeElement(element) {
+            //    element.css({ "width": `${element.width() - 4}px`, "height": `${element.height() - 4}px` });
+            //}
+            //function edgeBound(event = null, ui = null) {
+            //    const dw = getLeft(box) - image[0].width + $(".HP-Crop-Box").width();
+            //    const dh = getTop(box) - image[0].height + $(".HP-Crop-Box").height();
+
+            //    if (event == null && ui == null) {
+            //        var top = getTop(image) > getTop(box) ? getTop(box) : getTop(image) < dh ? dh : getTop(image);
+            //        var left = getLeft(image) > getLeft(box) ? getLeft(box) : getLeft(image) < dw ? dw : getLeft(image);
+            //        setPos(image, left, top);
+            //    }
+            //    else {
+            //        ui.position.top = ui.position.top > getTop(box) ? getTop(box) : ui.position.top < dh ? dh : ui.position.top;
+            //        ui.position.left = ui.position.left > getLeft(box) ? getLeft(box) : ui.position.left < dw ? dw : ui.position.left;
+            //    }
+
+            //    //printInfo();
+            //}
+            //function printInfo() {
+            //    const rx = Math.round(getLeft(image) - getLeft(box));
+            //    const ry = Math.round(getTop(image) - getTop(box));
+
+            //    const ak = ratioAR * rk;
+            //    const ax = Math.round(ratioAR * rx);
+            //    const ay = Math.round(ratioAR * ry);
+
+            //    const bw = box.width() * box.width() / (rw + rk);
+            //    const bh = box.height() * box.height() / (rh + rk);
+            //    const x = -Math.round(aw / (aw + ak) * ax);
+            //    const y = -Math.round(aw / (aw + ak) * ay);
+
+            //    console.clear();
+            //    console.log(`Box\n\n` +
+            //        `ak: ${ak}\n\n` +
+            //        `Actual\n` +
+            //        `Width: ${bw}\n` +
+            //        `Height: ${bh}\n` +
+            //        `x: ${x}\n` +
+            //        `y: ${y}\n\n`);
+            //    console.log(`Image\n\n` +
+            //        `rk: ${rk}\n\n` +
+            //        `Actual\n` +
+            //        `Width: ${aw}\n` +
+            //        `Height: ${ah}\n` +
+            //        `x: ${x}\n` +
+            //        `y: ${y}\n\n` +
+            //        `Absolute\n` +
+            //        `Width: ${aw + ak}\n` +
+            //        `Height: ${ah + ak}\n` +
+            //        `x: ${ax}\n` +
+            //        `y: ${ay}\n\n` +
+            //        `Relative\n` +
+            //        `Width: ${rw + rk}\n` +
+            //        `Height: ${rh + rk}\n` +
+            //        `x: ${rx}\n` +
+            //        `y: ${ry}\n\n`);
+            //}
         })
     </script>
 
