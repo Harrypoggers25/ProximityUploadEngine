@@ -1,0 +1,55 @@
+﻿.HP-Cropper {
+    background-color: black;
+    aspect-ratio: 16/9;
+    height: 400px;
+}
+
+    .HP-Cropper .HP-Crop-Image-Wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .HP-Cropper .HP-Crop-Image {
+        outline: 2px dotted rgba(255,255,255,0.5);
+        position: absolute;
+        display: none;
+        height: 100%;
+    }
+
+    .HP-Cropper .HP-Crop-Box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        aspect-ratio: 1;
+        height: 100%;
+        /*width: 1px;*/
+        background-color: dimgrey;
+        opacity: 0.7;
+        outline: 2px dashed white;
+        overflow: hidden;
+        pointer-events: none;
+        touch-action: none;
+    }
+
+        .HP-Cropper .HP-Crop-Box::after,
+        .HP-Cropper .HP-Crop-Box::before {
+            content: "";
+            position: absolute;
+            border: 2px dashed white;
+        }
+
+        .HP-Cropper .HP-Crop-Box::after {
+            width: 120%;
+            height: 33.33%;
+        }
+
+        .HP-Cropper .HP-Crop-Box::before {
+            height: 120%;
+            width: 33.33%;
+        }

@@ -1,5 +1,5 @@
 ﻿class HP_ProfilePicture {
-    constructor(mainElement, { text = 'Change photo', fadeIn = false, src = "https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" } = {}) {
+    constructor(mainElement, { text = 'Change photo', onLoad, fadeIn = false, src = "https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" } = {}) {
         this.mainElement = $(mainElement).addClass("HP-ProfilePicture");
         this.bgWrapper = $("<div>").addClass("HP-Background-Wrapper");
         this.imageWrapper = $("<div>").addClass("HP-Image-Wrapper");
@@ -16,9 +16,18 @@
 
         this.clickable = $(".HP-Clickable");
 
+        this.onLoad = onLoad == null ? function () { } : onLoad;
         this.url = null;
+        this.file = null;
         this.image[0].onload = () => {
-            this.setImageRect({ x: 0, y: 0, w: 450, h: 450 });
+            const w = this.image[0].naturalWidth;
+            const h = this.image[0].naturalHeight;
+            const k = h > w ? w : h;
+            const x = w / 2 - k / 2;
+            const y = h / 2 - k / 2;
+
+            this.setImageRect({ x: x, y: y, w: k, h: k });
+            this.onLoad(this.image[0].src);
         };
 
         if (fadeIn) {
@@ -56,18 +65,10 @@
             URL.revokeObjectURL(this.url);
         }
         this.url = URL.createObjectURL(file);
+        this.file = file;
         this.loadImageFromUrl(this.url);
     }
     loadImageFromUrl(url) {
-        this.image[0].onload = () => {
-            const w = this.image[0].naturalWidth;
-            const h = this.image[0].naturalHeight;
-            const k = h > w ? w : h;
-            const x = w / 2 - k / 2;
-            const y = h / 2 - k / 2;
-
-            this.setImageRect({ x: x, y: y, w: k, h: k });
-        };
         this.image[0].src = url;
     }
     setImageRect(rect) {
@@ -83,5 +84,8 @@
             "width": rw + "px",
             "height": rh + "px"
         });
+    }
+    getImageFile() {
+        return this.file;
     }
 }
