@@ -1,6 +1,6 @@
 ﻿class HP_ProfilePicture {
     constructor(mainElement, { text = 'Change photo', onLoad, fadeIn = false, src = "https://us.123rf.com/450wm/captainvector/captainvector1602/captainvector160224698/52998632-faceless-man.jpg?ver=6" } = {}) {
-        this.mainElement = $(mainElement).addClass("HP-ProfilePicture");
+        this.element = $(mainElement).addClass("HP-ProfilePicture");
         this.bgWrapper = $("<div>").addClass("HP-Background-Wrapper");
         this.imageWrapper = $("<div>").addClass("HP-Image-Wrapper");
         this.image = $("<img>").addClass("HP-Image").attr("src", src);
@@ -12,7 +12,7 @@
         this.imageWrapper.append(this.image);
         this.hoverWrapper.append(this.icn_hover, this.txt_hover);
         this.bgWrapper.append(this.imageWrapper, this.hoverbg, this.hoverWrapper);
-        this.mainElement.append(this.bgWrapper);
+        this.element.append(this.bgWrapper);
 
         this.clickable = $(".HP-Clickable");
 

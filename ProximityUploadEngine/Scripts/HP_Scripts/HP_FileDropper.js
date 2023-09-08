@@ -1,6 +1,17 @@
 ﻿class HP_FileDropper {
-    constructor(mainElement, { txt_messagePrompt, txt_onHover, txt_onDrag, txt_messageError, clr_onHover, clr_offHover, fadeIn = false, onSuccess, onError } = {}) {
+    constructor(mainElement,
+        {
+            mime,
+            txt_messagePrompt, txt_onHover, txt_onDrag, txt_messageError,
+            clr_onHover, clr_offHover,
+            bdr_onDrag, bdr_offDrag,
+            borderOn = true, fadeIn = false,
+            onSuccess, onError
+        } = {}) {
+
         this.file = null;
+        this.mime = mime;
+        this.borderOn = borderOn;
         this.onSuccess = onSuccess == null ? function () { } : onSuccess;
         this.onError = onError == null ? function () { } : onError;
 
@@ -10,9 +21,12 @@
         this.txt_messageError = txt_messageError == null ? "" : txt_messageError;
         this.clr_onHover = clr_onHover == null ? "transparent" : clr_onHover;
         this.clr_offHover = clr_offHover == null ? this.clr_onHover : clr_offHover;
+        this.bdr_onDrag = bdr_onDrag == null ? "2px dashed black" : bdr_onDrag;
+        this.bdr_offDrag = bdr_offDrag == null ? "2px solid black" : bdr_offDrag;
 
-        this.mainElement = $(mainElement).addClass("HP-FileDropper");
-        this.dropwrapper = this.mainElement;
+
+        this.element = $(mainElement).addClass("HP-FileDropper");
+        this.dropwrapper = this.element;
         this.icon = $("<i>").addClass("fa fa-cloud-upload HP-icn-drop").attr('aria-hidden', 'true');
         this.messagePrompt = $("<span>").addClass("HP-drop-messagePrompt").text(txt_messagePrompt);
         this.messageErrorWrapper = $("<div>").addClass("HP-drop-messageError");
@@ -23,6 +37,12 @@
         this.messageErrorWrapper.append(this.iconError, this.messageError);
         this.dropwrapper.append(this.icon, this.messagePrompt, this.messageErrorWrapper, this.dropZone);
 
+        if (!this.borderOn) {
+            this.dropwrapper.css('border', "none");
+        }
+        else if (bdr_offDrag != null) {
+            this.updateBorder(null, this.bdr_offDrag);
+        }
         if (fadeIn) {
             $(".HP-icn-drop, .HP-drop-messagePrompt").hide();
             $(".HP-icn-drop, .HP-drop-messagePrompt").fadeIn(500);
@@ -30,17 +50,17 @@
 
         // Drag and Drop handler
         this.dropZone.on('dragover', (e) => {
-            this.setBorder(e, "dashed", "black");
+            this.updateBorder(e, this.bdr_onDrag);
             this.updateAttr('fa-cloud-upload', 'fa-chevron-circle-down', this.txt_onDrag, this.clr_onHover);
         });
 
         this.dropZone.on('dragleave', (e) => {
-            this.setBorder(e, "solid", "black");
+            this.updateBorder(e, this.bdr_offDrag);
             this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
         });
 
         this.dropZone.on('drop', (e) => {
-            this.setBorder(e, "solid", "black");
+            this.updateBorder(e, this.bdr_offDrag);
             this.updateAttr('fa-chevron-circle-down', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
 
             var file = e.originalEvent.dataTransfer.files[0];
@@ -52,7 +72,8 @@
             this.updateAttr('fa-folder', 'fa-cloud-upload', this.txt_messagePrompt, this.clr_offHover);
 
             var input = $("<input>");
-            input.attr("type", "file").attr("accept", "video/*").attr("multiple", false)
+            const mime = this.mime == null ? "/" : this.mime;
+            input.attr("type", "file").attr("accept", `${mime}*`).attr("multiple", false)
                 .change((event) => {
                     var file = event.target.files[0];
                     this.handleFile(file);
@@ -70,9 +91,13 @@
             }
         );
     }
-    setBorder(e, style, color) {
-        e.preventDefault();
-        this.dropwrapper.css('border', '4px ' + style + ' ' + color);
+    updateBorder(e, borderStyle) {
+        if (e != null) {
+            e.preventDefault();
+        }
+        if (this.borderOn) {
+            this.dropwrapper.css('border', borderStyle);
+        }
     }
     updateAttr(oldIconClass, newIconClass, newTextPrompt, newBgColor) {
         this.icon.removeClass(oldIconClass).addClass(newIconClass);
@@ -86,7 +111,7 @@
     handleFile(file) {
         this.file = null;
 
-        if (!file.type.startsWith('video/')) {
+        if (this.mime == null ? false : !file.type.startsWith(this.mime)) {
             this.messageErrorWrapper.show();
             this.onError();
         } else {

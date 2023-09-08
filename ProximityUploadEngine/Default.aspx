@@ -50,10 +50,10 @@
         }
     </style>
 
-    <main>
-        <div class="container mt-5">
+    <main class="vh-100 d-flex align-items-center">
+        <div class="container">
             <div class="row justify-content-center">
-                <div class="col-6">
+                <div class="col-lg-6 col-12">
                     <div class="card Cd-Login">
                         <div class="card-header">
                             <img src="/svg/Vision-Four.svg" height="50" alt="SVG Image" />

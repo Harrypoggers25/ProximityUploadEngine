@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 using System.Text.Json.Serialization;
 using System.Web;
 
@@ -13,7 +14,12 @@ namespace ProximityUploadEngine
         public void ProcessRequest(HttpContext context)
         {
             HttpPostedFile file = context.Request.Files["file"];
-            var rect = context.Request["rect"] != null ?  JsonConvert.DeserializeObject<Dictionary<string, int>>(context.Request["rect"]) : null;
+            var rect = context.Request["rect"] != null ? JsonConvert.DeserializeObject<Dictionary<string, int>>(context.Request["rect"]) : null;
+
+            localSave(context, file, rect);
+        }
+        private void localSave(HttpContext context, HttpPostedFile file, Dictionary<string, int> rect)
+        {
             if (file != null)
             {
                 string fileName = rect != null ? $"{rect["x"]}_{rect["y"]}_{rect["w"]}{Path.GetExtension(file.FileName)}" : $"content{Path.GetExtension(file.FileName)}";
@@ -35,9 +41,10 @@ namespace ProximityUploadEngine
                     }
                     string fullFilePath = Path.Combine(abs_filePath, fileName);
                     file.SaveAs(fullFilePath);
-                    context.Response.ContentType = "application/json";
-                    //context.Response.Write("File Saved at: " + fullFilePath);
-                    context.Response.Write(JsonConvert.SerializeObject(rect));
+                    //context.Response.ContentType = "application/json";
+                    context.Response.ContentType = "text/plain";
+                    context.Response.Write("File Saved at: " + fullFilePath);
+                    //context.Response.Write(JsonConvert.SerializeObject(rect));
                 }
                 catch (Exception ex)
                 {
@@ -45,7 +52,6 @@ namespace ProximityUploadEngine
                 }
             }
         }
-
         public bool IsReusable
         {
             get

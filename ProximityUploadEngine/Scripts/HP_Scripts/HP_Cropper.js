@@ -1,12 +1,12 @@
 ﻿class HP_Cropper {
     constructor(mainElement) {
-        this.mainElement = $(mainElement).addClass("HP-Cropper");
+        this.element = $(mainElement).addClass("HP-Cropper");
         this.wrapper = $("<div>").addClass("HP-Crop-Image-Wrapper");
         this.image = $("<img>").addClass("HP-Crop-Image");
         this.box = $("<div>").addClass("HP-Crop-Box");
 
         this.wrapper.append(this.image, this.box);
-        this.mainElement.append(this.wrapper);
+        this.element.append(this.wrapper);
 
         this.resizeElement(this.box);
         this.recenterElement(this.box);

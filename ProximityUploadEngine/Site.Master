@@ -4,14 +4,20 @@
 
 <html lang="en">
 <head runat="server">
+    <link rel="stylesheet" href="Scripts/HP_Scripts/HP_Sidebar.css" />
     <style>
         .body-content {
             padding: 0 70px !important;
             transition: filter 0.3s ease; /* Add smooth transition effect */
             position: relative;
+            margin-top: 0 !important;
         }
+
         /*navbar*/
         .navbar {
+            position: absolute !important;
+            top: 0 !important;
+            width: 100vw;
             background: linear-gradient(135deg, #000428, #004e92);
             z-index: 2;
         }
@@ -22,57 +28,6 @@
             text-decoration: none;
             font-weight: bold;
         }
-
-        /*sidebar*/
-        .sidebar {
-            width: 65px;
-            background-color: #d3d3d3;
-            position: absolute;
-            height: 100vh;
-            overflow: hidden;
-            transition: width 0.3s;
-            z-index: 2;
-        }
-
-            .sidebar:not(:hover) span {
-                color: transparent;
-            }
-
-            .sidebar:hover {
-                width: 200px;
-            }
-
-            .sidebar a {
-                margin-top: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 0px 20px;
-                text-decoration: none;
-            }
-
-
-
-                .sidebar a span {
-                    margin-left: 12px;
-                    color: #222;
-                    font-weight: bold;
-                }
-
-                .sidebar a i {
-                    color: #222;
-                    font-size: 20px;
-                }
-
-                .sidebar a:hover span,
-                .sidebar a:hover i {
-                    color: #004e92;
-                }
-
-                .sidebar a.text-nowrap:hover span,
-                .sidebar a.text-nowrap:hover i {
-                    color: #222;
-                }
 
         .toggle-switch {
             position: absolute;
@@ -102,7 +57,12 @@
             color: orange;
         }
 
-        .dark-mode {
+        @media (max-width: 768px) {
+            .body-content {
+                padding: 0px !important;
+            }
+        }
+        /*        .dark-mode {
             background-color: #212434;
         }
 
@@ -146,7 +106,7 @@
                 background: linear-gradient(to bottom, #1450A3, #4682A9);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
-            }
+            }*/
     </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -183,7 +143,6 @@
             </Scripts>
 
         </asp:ScriptManager>
-
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
             <div class="container">
                 <a class="navbar-brand" runat="server">
@@ -197,34 +156,42 @@
                 </asp:Panel>
             </div>
         </nav>
-        <asp:Panel ID="pnl_mysidebar" runat="server" class="sidebar">
-            <a runat="server" class="text-nowrap ">
-                <i class="fas fa-bars"></i>
-                <span class="sidebar-text">Main Menu</span>
-            </a>
-            <hr />
-            <a runat="server" href="agencydashboard" class="boxed-link">
-                <i class="fas fa-home"></i>
-                <span class="sidebar-text">Home</span>
-            </a>
-            <br />
-            <a runat="server" href="Settings" class="boxed-link">
-                <i class="fas fa-cog"></i>
-                <span class="sidebar-text">Settings</span>
-            </a>
-            <br>
-            <a runat="server" href="Default" class="boxed-link">
-                <i class="fas fa-sign-out"></i>
-                <span class="sidebar-text">Logout</span>
-            </a>
-            <br />
-            <br />
-            <div class="toggle-switch">
-                <i class="fa-solid fa-sun"></i>
-                <i class="fa-solid fa-moon"></i>
-            </div>
-        </asp:Panel>
+        <div class="HP-Sidebar-Wrapper">
+            <div class="HP-Sidebar-Modal"></div>
+            <div id="pnl_sidebar" class="HP-Sidebar">
+                <ul class="HP-Sidebar-Header">
+                    <li>
+                        <i class="fas fa-bars HP-Sidebar-Icon"></i>
+                        <span class="HP-Sidebar-Text">Menu</span>
+                    </li>
+                </ul>
+                <ul class="HP-Sidebar-Body">
+                    <li class="HP-Sidebar-Nav-Item">
+                        <a href="Dashboard">
+                            <i class="fas fa-home HP-Sidebar-Icon"></i>
+                            <span class="HP-Sidebar-Text">Home</span>
+                        </a>
+                    </li>
+                    <li class="HP-Sidebar-Nav-Item">
+                        <a href="Settings">
+                            <i class="fas fa-cog HP-Sidebar-Icon"></i>
+                            <span class="HP-Sidebar-Text">Settings</span>
+                        </a>
+                    </li>
+                    <li class="HP-Sidebar-Nav-Item">
+                        <a href="Default">
+                            <i class="fas fa-sign-out HP-Sidebar-Icon"></i>
+                            <span class="HP-Sidebar-Text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="HP-Sidebar-Footer">
+                    <li>DarkMode
 
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
             <hr />
@@ -236,6 +203,8 @@
     <asp:PlaceHolder runat="server">
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
+
+    <script src="Scripts/HP_Scripts/HP_Sidebar.js"></script>
     <script>
         $(document).ready(function () {
             const toggleSwitch = $('.toggle-switch');
@@ -262,19 +231,18 @@
                 const element = document.body;
                 element.classList.toggle("dark-mode");
             });
-            $("#<%= pnl_mysidebar.ClientID %>").hover(
-                function () {
-                    $("#<%= pnl_mysidebar.ClientID %>, .navbar").dimBackground();
-                },
-                function () {
-                    $.undim();
-                }
-            );
+
+            var isHovered = false;
+            $(".navbar-brand").click(function () {
+                console.log("hehe");
+                isHovered = !isHovered;
+                console.log(isHovered);
+                hovered(isHovered);
+            });
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js" integrity="sha512-57oZ/vW8ANMjR/KQ6Be9v/+/h6bq9/l3f0Oc7vn6qMqyhvPd1cvKBRWWpzu0QoneImqr2SkmO4MSqU+RpHom3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="https://andywer.github.io/jquery-dim-background/jquery.dim-background.min.js"></script>
 </body>
 </html>

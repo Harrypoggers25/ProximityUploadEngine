@@ -23,16 +23,16 @@ namespace ProximityUploadEngine
         }
         public void toggleLoginHiddenElement(bool hidden)
         {
-            if (hidden)
-            {
-                pnl_mysidebar.Visible = false;
-                pnl_hdrProfile.Visible = false;
-            }
-            else
-            {
-                pnl_mysidebar.Visible = true;
-                pnl_hdrProfile.Visible = true;
-            }
+            //if (hidden)
+            //{
+            //    pnl_mysidebar.Visible = false;
+            //    pnl_hdrProfile.Visible = false;
+            //}
+            //else
+            //{
+            //    pnl_mysidebar.Visible = true;
+            //    pnl_hdrProfile.Visible = true;
+            //}
         }
         public Agency getAgencyFromSession()
         {
@@ -46,6 +46,7 @@ namespace ProximityUploadEngine
             }
             catch (Exception ex)
             {
+                Response.Write(ex.Message);
                 Response.Redirect("Default.aspx");
             }
             return agency;

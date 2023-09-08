@@ -1,0 +1,94 @@
+﻿.HP-Sidebar-Wrapper {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    pointer-events: none;
+    touch-action: none;
+}
+
+.HP-Sidebar-Modal {
+    position: absolute;
+    background-color: black;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    touch-action: none;
+}
+
+.HP-Sidebar,
+.HP-Sidebar ul,
+.HP-Sidebar li,
+.HP-Sidebar a {
+    display: flex;
+}
+
+.HP-Sidebar {
+    --HP-Sidebar-Square-Size: 65px;
+    --HP-Sidebar-Square-Size-Hover: 200px;
+    flex-direction: column;
+    position: absolute;
+    width: var(--HP-Sidebar-Square-Size);
+    height: 100%;
+    background-color: #d3d3d3;
+    transition: width 0.3s ease;
+    padding-bottom: var(--HP-Sidebar-Square-Size);
+    pointer-events: all;
+    touch-action: auto;
+}
+
+    .HP-Sidebar ul {
+        padding-left: 0;
+        margin-bottom: 0;
+        position: relative;
+        flex-direction: column;
+    }
+
+    .HP-Sidebar .HP-Sidebar-Header {
+        border-bottom: 1px solid #a6a7a8;
+    }
+
+        .HP-Sidebar .HP-Sidebar-Header li {
+            cursor: default;
+        }
+
+    .HP-Sidebar li {
+        align-items: center;
+        justify-content: center;
+        list-style: none;
+        color: #222;
+        font-weight: bold;
+        font-family: var(--bs-font-sans-serif);
+        width: 100%;
+        height: var(--HP-Sidebar-Square-Size);
+        transition: padding-left 0.3s ease;
+        cursor: pointer;
+    }
+
+    .HP-Sidebar a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .HP-Sidebar .HP-Sidebar-Icon {
+        aspect-ratio: 1;
+        font-size: 20px;
+    }
+
+    .HP-Sidebar .HP-Sidebar-Text {
+        display: none;
+        transition: display 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .HP-Sidebar .HP-Sidebar-Footer {
+        flex-grow: 1;
+        justify-content: end;
+        transition: justify-content 0.3s ease;
+    }
+
+    .HP-Sidebar .HP-Sidebar-Nav-Item:hover {
+        color: #0a58ca;
+    }

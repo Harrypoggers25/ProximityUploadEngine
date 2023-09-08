@@ -1,5 +1,5 @@
 ﻿class HP_VideoPreview {
-    constructor(mainElement, { onSuccessLoad, onErrorLoad, onUnload, txt_UnloadedVideo, txt_ErrorLoadVideo, fadeIn = false } = {}) {
+    constructor(mainElement, { txt_UnloadedVideo, txt_ErrorLoadVideo, fadeIn = false, onSuccessLoad, onErrorLoad, onUnload } = {}) {
         this.onSuccessLoad = onSuccessLoad == null ? function () { } : onSuccessLoad;
         this.onErrorLoad = onErrorLoad == null ? function () { } : onErrorLoad;
         this.onUnload = onUnload == null ? function () { } : onUnload;
@@ -7,7 +7,7 @@
         this.str_UnloadedVideo = txt_UnloadedVideo == null ? "No Video Loaded" : txt_UnloadedVideo;
         this.str_ErrorLoadVideo = txt_ErrorLoadVideo == null ? "Error: Unable to Load Video" : txt_ErrorLoadVideo;
 
-        this.mainElement = $(mainElement).addClass("HP-VideoPreview");
+        this.element = $(mainElement).addClass("HP-VideoPreview");
         this.videoWrapper = $("<div>").addClass("HP-Video-Wrapper");
         this.unloadVideoWrapper = $("<div>").addClass("HP-Unloaded-Video-Wrapper");
         this.icn_Error = $("<i>").addClass("fa fa-exclamation-circle Icn-Error");
@@ -16,12 +16,13 @@
         this.video = $("<video>").addClass("HP-Video").attr("controls", true);
         this.video[0].onloadeddata = () => {
             this.unloadVideoWrapper.hide();
+            this.video[0].muted = true;
             this.video.show();
             this.onSuccessLoad();
         }
         this.unloadVideoWrapper.append(this.icn_Error, this.txt_unloadedVideo);
         this.videoWrapper.append(this.video, this.unloadVideoWrapper);
-        this.mainElement.append(this.videoWrapper);
+        this.element.append(this.videoWrapper);
 
         if (fadeIn) {
             this.unloadVideoWrapper.hide();

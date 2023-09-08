@@ -60,8 +60,6 @@
             });
             const btnUploadVideo1 = $("#btn_uploadVideo1").click(function (e) {
                 e.preventDefault();
-                const rect = cropper1.getRect();
-                picture1.setImageRect(rect);
                 var formData = new FormData();
                 formData.append("file", dropper1.getFile());
                 $.ajax({

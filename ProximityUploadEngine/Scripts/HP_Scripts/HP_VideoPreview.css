@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: inherit;
+    height: 100%;
 }
 
 .HP-Unloaded-Video-Wrapper {
@@ -28,5 +28,5 @@
 
 .HP-Video {
     display: none;
-    height: inherit;
+    height: 100%;
 }
