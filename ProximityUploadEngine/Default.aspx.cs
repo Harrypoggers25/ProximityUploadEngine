@@ -1,12 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Web;
-using System.Web.Services;
+﻿using System;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace ProximityUploadEngine
 {
@@ -31,7 +24,7 @@ namespace ProximityUploadEngine
                     var master = (SiteMaster)this.Master;
                     master.updateSessionFromUser(agency);
                     master.toggleLoginHiddenElement(false);
-                    Response.Redirect("agencydashboard.aspx");
+                    Response.Redirect("Dashboard.aspx");
                 }
             }
         }

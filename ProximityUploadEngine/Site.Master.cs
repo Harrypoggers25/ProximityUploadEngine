@@ -15,7 +15,7 @@ namespace ProximityUploadEngine
         }
         public void setLblUsername(string username)
         {
-            lbl_username.Text = username;
+            //lbl_username.Text = username;
         }
         public void updateProfilePicture()
         {

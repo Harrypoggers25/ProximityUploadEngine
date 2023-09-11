@@ -5,109 +5,6 @@
 <html lang="en">
 <head runat="server">
     <link rel="stylesheet" href="Scripts/HP_Scripts/HP_Sidebar.css" />
-    <style>
-        .body-content {
-            padding: 0 70px !important;
-            transition: filter 0.3s ease; /* Add smooth transition effect */
-            position: relative;
-            margin-top: 0 !important;
-        }
-
-        /*navbar*/
-        .navbar {
-            position: absolute !important;
-            top: 0 !important;
-            width: 100vw;
-            background: linear-gradient(135deg, #000428, #004e92);
-            z-index: 2;
-        }
-
-        #pnl_hdrProfile span {
-            color: aliceblue;
-            font-family: 'Roboto', sans-serif;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .toggle-switch {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            bottom: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            outline: dimgrey solid 3px;
-            border-radius: 50%;
-            background-color: white;
-            cursor: pointer;
-        }
-
-            .toggle-switch * {
-                position: absolute;
-            }
-
-        .fa-moon {
-            color: white;
-        }
-
-        .fa-sun {
-            color: orange;
-        }
-
-        @media (max-width: 768px) {
-            .body-content {
-                padding: 0px !important;
-            }
-        }
-        /*        .dark-mode {
-            background-color: #212434;
-        }
-
-        .dark-mode {
-            transition: background-color 0.3s ease;
-        }
-
-            .dark-mode .card {
-                background-color: #2b2f44;
-                color: white;
-            }
-
-            .dark-mode .card-header {
-                background-color: #2b2f44;
-            }
-
-            .dark-mode .sidebar {
-                background: linear-gradient(135deg,#000428, #004e92);
-            }
-
-            .dark-mode .fa-bars, .dark-mode .fa-box, .dark-mode .fa-cog, .dark-mode .fa-home, .dark-mode .fa-sign-out {
-                color: white;
-            }
-
-            .dark-mode .sidebar-text {
-                color: white;
-            }
-
-
-            .dark-mode .sidebar a:hover span,
-            .dark-mode .sidebar a:hover i {
-                color: #9E9FA5;
-            }
-
-            .dark-mode .sidebar a.text-nowrap:hover span,
-            .dark-mode .sidebar a.text-nowrap:hover i {
-                color: white;
-            }
-
-            .dark-mode .footervf {
-                background: linear-gradient(to bottom, #1450A3, #4682A9);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }*/
-    </style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%: Page.Title %> - My ASP.NET Application</title>
@@ -143,59 +40,26 @@
             </Scripts>
 
         </asp:ScriptManager>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
-            <div class="container">
-                <a class="navbar-brand" runat="server">
-                    <img src="https://www.visionfour.com/wp-content/uploads/logo-visionfour.png" style="height: 25px;" />
-                </a>
-                <asp:Panel ID="pnl_hdrProfile" runat="server">
-                    <span style="display: flex; align-items: center;">
-                        <asp:Image ID="img_profilePicture" runat="server" ImageUrl="/assets/images/user.png" Height="30px" />
-                        <asp:Label ID="lbl_username" runat="server" Text="" Style="margin-left: 10px;"></asp:Label>
-                    </span>
-                </asp:Panel>
-            </div>
-        </nav>
-        <div class="HP-Sidebar-Wrapper">
-            <div class="HP-Sidebar-Modal"></div>
-            <div id="pnl_sidebar" class="HP-Sidebar">
-                <ul class="HP-Sidebar-Header">
-                    <li>
-                        <i class="fas fa-bars HP-Sidebar-Icon"></i>
-                        <span class="HP-Sidebar-Text">Menu</span>
-                    </li>
-                </ul>
-                <ul class="HP-Sidebar-Body">
-                    <li class="HP-Sidebar-Nav-Item">
-                        <a href="Dashboard">
-                            <i class="fas fa-home HP-Sidebar-Icon"></i>
-                            <span class="HP-Sidebar-Text">Home</span>
-                        </a>
-                    </li>
-                    <li class="HP-Sidebar-Nav-Item">
-                        <a href="Settings">
-                            <i class="fas fa-cog HP-Sidebar-Icon"></i>
-                            <span class="HP-Sidebar-Text">Settings</span>
-                        </a>
-                    </li>
-                    <li class="HP-Sidebar-Nav-Item">
-                        <a href="Default">
-                            <i class="fas fa-sign-out HP-Sidebar-Icon"></i>
-                            <span class="HP-Sidebar-Text">Logout</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="HP-Sidebar-Footer">
-                    <li>DarkMode
-
-                    </li>
-                </ul>
-            </div>
+        <div class="HP-Navbar">
+            helloasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
+        </div>
+        <div id="sidebar1" class="HP-Sidebar">
+            <ul class="HP-Sidebar-Header">
+                <li>Menu</li>
+            </ul>
+            <ul class="HP-Sidebar-Body">
+                <li class="HP-Sidebar-Nav-Item">Home</li>
+                <li class="HP-Sidebar-Nav-Item">Settings</li>
+                <li class="HP-Sidebar-Nav-Item">Logout</li>
+            </ul>
+            <ul class="HP-Sidebar-Footer">
+                <li>DarkMode</li>
+            </ul>
         </div>
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
-            <hr />
-            <footer class="footervf">
+            <hr class="ms-5" />
+            <footer class="footervf ms-5">
                 <p>&copy; <%: DateTime.Now.Year %> - Vision Four Application</p>
             </footer>
         </div>
@@ -206,6 +70,26 @@
 
     <script src="Scripts/HP_Scripts/HP_Sidebar.js"></script>
     <script>
+        const sidebar1 = new HP_Sidebar("#sidebar1", 0, {
+            rows: [
+                {
+                    icon: "fas fa-bars",
+                },
+                {
+                    icon: "fas fa-home",
+                    href: "Dashboard"
+                },
+                {
+                    icon: "fas fa-cog",
+                    href: "Settings"
+                },
+                {
+                    icon: "fas fa-sign-out",
+                    href: "Default"
+                },
+                null
+            ]
+        });
         $(document).ready(function () {
             const toggleSwitch = $('.toggle-switch');
             var isToggled = false;

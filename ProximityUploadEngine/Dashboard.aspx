@@ -13,22 +13,24 @@
             height: auto;
         }
     </style>
-    <main>
+    <main class="vh-100">
         <div class="container">
-            <h1>Dashboard</h1>
+            <h1 class="ms-5">Dashboard</h1>
             <div class="row">
-                <div class="col w-100">
-                    <h3>Choose Company:</h3>
-                    <select class="form-select" aria-label="Default select example">
-                        <option value="1" selected>Company 1</option>
-                        <option value="2">Company 2</option>
-                        <option value="3">Company 3</option>
-                    </select>
+                <div class="col-12 w-100 d-flex justify-content-center">
+                    <div class="col-8">
+                        <h3>Choose Company:</h3>
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1" selected>Company 1</option>
+                            <option value="2">Company 2</option>
+                            <option value="3">Company 3</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="row mt-3">
-                <div class="col w-100">
-                    <div class="card">
+                <div class="col-12 w-100 d-flex justify-content-center">
+                    <div class="card col-8">
                         <div class="card-header">
                             <h3>Upload Your Content</h3>
                         </div>
@@ -55,8 +57,8 @@
             txt_onHover: "Open File Directory",
             txt_onDrag: "Drop File in Drop Zone",
             txt_messageError: "Invalid Format: Please upload a valid video file",
-            clr_onHover: "rgba(0, 0, 0, 0.5)",
-            clr_offHover: "white",
+            clr_onHover: "#e5e5e5",
+            clr_offHover: "#f7f7f7",
             fadeIn: true,
             mime: "video/",
             onSuccess: function () {
