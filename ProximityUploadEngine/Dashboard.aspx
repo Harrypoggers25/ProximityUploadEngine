@@ -4,54 +4,121 @@
     <link rel="stylesheet" href="Scripts/HP_Scripts/HP_FileDropper.css" />
     <link rel="stylesheet" href="Scripts/HP_Scripts/HP_VideoPreview.css" />
     <style>
-        .HP-FileDropper {
-            width: 100%;
+        .hp-icn-add-hotel {
+            display: flex;
+            align-items: center;
+            font-size: 28px;
+            color: grey;
+            cursor: pointer;
         }
 
-        .HP-VideoPreview {
-            width: 100%;
-            height: auto;
+            .hp-icn-add-hotel:hover {
+                color: black;
+            }
+
+        .HP-DropDown {
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .hp-checkbox-scroll-wrapper,
+        .hp-listbox-scroll {
+            padding: 2px 4px;
+            font-size: 20px;
+        }
+
+        .hp-checkbox-scroll-wrapper {
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px solid grey;
+        }
+
+            .hp-checkbox-scroll-wrapper label {
+                margin-left: 4px;
+            }
+
+        .hp-listbox-scroll {
+            height: 300px;
         }
     </style>
-    <main class="vh-100">
-        <div class="container">
-            <h1 class="ms-5">Dashboard</h1>
-            <div class="row">
-                <div class="col-12 w-100 d-flex justify-content-center">
-                    <div class="col-8">
-                        <h3>Choose Company:</h3>
-                        <select class="form-select" aria-label="Default select example">
-                            <option value="1" selected>Company 1</option>
-                            <option value="2">Company 2</option>
-                            <option value="3">Company 3</option>
-                        </select>
+    <main class="ms-5 mt-3">
+        <h1>Video Upload Engine</h1>
+        <div id="panel1" class="mt-3">
+            <div id="dd_agency" class="HP-DropDown mb-3"></div>
+            <div class="d-flex flex-column w-50">
+                <h3>Choose Client:</h3>
+                <div id="dd_client" class="HP-DropDown"></div>
+                <div class="d-flex justify-content-end">
+                    <a class="d-flex justify-content-end" href="#">Add new client</a>
+                </div>
+            </div>
+            <div class="d-flex flex-column w-50 mt-3">
+                <h3>Choose Hotel(s):</h3>
+                <div class="hp-checkbox-scroll-wrapper">
+                    <asp:CheckBoxList ID="cbl_hotel" runat="server"></asp:CheckBoxList>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a class="d-flex justify-content-end" href="#">Add new hotel</a>
+                </div>
+            </div>
+        </div>
+        <div id="panel2" class="mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Upload Your Content</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center w-100">
+                        <div id="dropper1" class="HP-FileDropper w-100"></div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-12 w-100 d-flex justify-content-center">
-                    <div class="card col-8">
-                        <div class="card-header">
-                            <h3>Upload Your Content</h3>
+        </div>
+        <div id="panel3" class="mt-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Video Succefully Uploaded</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row">
+                            <div class="w-100">
+                                <h3>Video Preview:</h3>
+                                <div class="d-flex justify-content-center w-100" style="background-color: black;">
+                                    <div id="video1" class="HP-VideoPreview"></div>
+                                </div>
+                            </div>
+                            <div class="ms-3 w-100">
+                                <h3>Video Details:</h3>
+                                <asp:ListBox ID="lb_videoDetails" runat="server" CssClass="hp-listbox-scroll w-100"></asp:ListBox>
+                            </div>
                         </div>
-                        <div class="card-body d-flex align-items-center flex-column">
-                            <div class="col w-100 d-flex justify-content-center">
-                                <div id="dropper1" class="HP-FileDropper w-100"></div>
-                                <div id="video1" class="HP-VideoPreview w-75"></div>
-                            </div>
-                            <div class="col mt-3">
-                                <button id="btn_unloadVideo1" class="btn btn-primary" style="display: none;">Unload Video</button>
-                                <button id="btn_uploadVideo1" class="btn btn-primary" style="display: none;">Upload Video</button>
-                            </div>
+                        <div class="d-flex flex-column mt-3">
+                            <h3>Upload Details:</h3>
+
+                            <span class="fw-bold">Title:</span>
+                            <asp:TextBox ID="tb_title" runat="server"></asp:TextBox>
+
+                            <span class="mt-3 fw-bold">Description:</span>
+                            <asp:TextBox ID="tb_description" runat="server"></asp:TextBox>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+    <script src="Scripts/HP_Scripts/HP_DropDown.js"></script>
     <script src="Scripts/HP_Scripts/HP_FileDropper.js"></script>
     <script src="Scripts/HP_Scripts/HP_VideoPreview.js"></script>
+    <script src="Scripts/HP_Scripts/HP_Ajax.js"></script>
     <script>
+        // Panel 1
+        const ddAgency = new HP_DropDown("#dd_agency", { initialOption: "Choose Agency" });
+        const ddClient = new HP_DropDown("#dd_client", { initialOption: "Choose Client" });
+
+        //$("#panel1").hide();
+
+        // Panel 2
         const dropper1 = new HP_FileDropper("#dropper1", {
             txt_messagePrompt: "Drag/Drop a file here or Upload from File",
             txt_onHover: "Open File Directory",
@@ -63,52 +130,28 @@
             mime: "video/",
             onSuccess: function () {
                 video1.loadVideo(dropper1.getFile());
-                video1.element.show();
-                dropper1.element.hide();
+                HP_Ajax.postFormData({
+                    url: "Web_Handlers/Dashboard/UpdateVideoDetails.ashx",
+                    data: { "file": dropper1.getFile() },
+                    success: function (response) {
+
+                    }
+                })
             },
             onError: function () {
-                video1.loadVideo(dropper1.getFile());
+                console.log("Error: Unable to load video")
             }
         });
 
+        // Panel 3
         const video1 = new HP_VideoPreview("#video1", {
             fadeIn: true,
             onSuccessLoad: function () {
-                btnUnloadVideo1.show();
-                btnUploadVideo1.show();
             },
             onUnload: function () {
-                btnUnloadVideo1.hide();
-                btnUploadVideo1.hide();
             },
             onErrorLoad: function () {
-                btnUnloadVideo1.show();
             }
-        });
-        video1.element.hide();
-        btnUnloadVideo1 = $("#btn_unloadVideo1").hide().click(function (e) {
-            e.preventDefault();
-            video1.unloadVideo();
-            video1.element.hide();
-            dropper1.element.show();
-        });
-        btnUploadVideo1 = $("#btn_uploadVideo1").hide().click(function (e) {
-            e.preventDefault();
-            var formData = new FormData();
-            formData.append("file", dropper1.getFile());
-            $.ajax({
-                url: "Web_Handlers/FileUploadHandler.ashx?",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function () {
-                    console.log("upload fail")
-                }
-            });
         });
     </script>
 </asp:Content>

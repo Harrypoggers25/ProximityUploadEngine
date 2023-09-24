@@ -3,6 +3,11 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <style>
         /*Data table*/
+        .Footer-BtnTable {
+            display: flex;
+            justify-content: center;
+        }
+
         .toolbar { /*Title*/
             font-size: 40px;
             font-weight: 600;
@@ -48,7 +53,95 @@
         }
     </style>
     <main>
-        <table id="tbl-agency" class="table table-dark table-striped table-bordered table-hover">
+        <h1>Admin Page</h1>
+        <table id="tbl_agency" class="table table-dark table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Agency Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Description</th>
+                    <th>Contact Number</th>
+                    <th>Profile Picture</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th colspan="8">
+                        <div class="Footer-BtnTable">
+                            <button id="btn_agencyAddRow" class="btn btn-primary">Add Row (+)</button>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        <table id="tbl_hotel" class="table table-dark table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Hotel Name</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Contact Number</th>
+                    <th>Profile Picture</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th colspan="9">
+                        <div class="Footer-BtnTable">
+                            <button id="btn_hotelAddRow" class="btn btn-primary">Add Row (+)</button>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        <table id="tbl_company" class="table table-dark table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th colspan="4">
+                        <div class="Footer-BtnTable">
+                            <div class="Footer-BtnTable">
+                                <button id="btn_companyAddRow" class="btn btn-primary">Add Row (+)</button>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        <table id="tbl_content" class="table table-dark table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Path</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th colspan="4">
+                        <div class="Footer-BtnTable">
+                            <button id="btn_contentAddRow" class="btn btn-primary">Add Row (+)</button>
+                        </div>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        <%--<table id="tbl-agency" class="table table-dark table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -66,7 +159,7 @@
                     </th>
                 </tr>
             </tfoot>
-        </table>
+        </table>--%>
         <div id="dlg-agency">
             <label for="tb-name">
                 Name:<br />
@@ -94,7 +187,7 @@
             const dlgAgency = $("#dlg-agency");
 
             // datatable initialization
-            const dataTable = new DataTable('#tbl-agency', {
+            const dataTable = new DataTable('#tbl_agency', {
                 paging: false,
                 info: false,
                 scrollCollapse: true,
@@ -208,7 +301,7 @@
             });
 
             //add row event
-            $("#btnTbAddRow").click(function (e) {
+            $(".Footer-BtnTable button").click(function (e) {
                 e.preventDefault();
 
                 var currentId;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+
+using ProximityUploadEngine.Database;
 
 namespace ProximityUploadEngine
 {
@@ -11,7 +9,6 @@ namespace ProximityUploadEngine
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
         public void setLblUsername(string username)
         {
@@ -41,8 +38,8 @@ namespace ProximityUploadEngine
             {
                 agency.id = Convert.ToInt32(Session["id"]);
                 agency.name = Session["name"].ToString();
-                agency.email = Session["email"].ToString();
-                agency.password = Session["password"].ToString();
+                agency.credential.email = Session["email"].ToString();
+                agency.credential.password = Session["password"].ToString();
             }
             catch (Exception ex)
             {
@@ -55,8 +52,8 @@ namespace ProximityUploadEngine
         {
             Session["id"] = user.id;
             Session["name"] = user.name;
-            Session["email"] = user.email;
-            Session["password"] = user.password;
+            Session["email"] = user.credential.email;
+            Session["password"] = user.credential.password;
         }
     }
 }

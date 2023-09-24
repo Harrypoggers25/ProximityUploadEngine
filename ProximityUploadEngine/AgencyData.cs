@@ -2,6 +2,9 @@
 using System;
 using System.Collections.Generic;
 
+using ProximityUploadEngine.Database;
+using System.Net;
+
 namespace ProximityUploadEngine
 {
     public class AgencyData
@@ -21,8 +24,8 @@ namespace ProximityUploadEngine
                 {
                     cmd.Parameters.AddWithValue("id", agency.id);
                     cmd.Parameters.AddWithValue("name", agency.name);
-                    cmd.Parameters.AddWithValue("email", agency.email);
-                    cmd.Parameters.AddWithValue("password", agency.password);
+                    cmd.Parameters.AddWithValue("email", agency.credential.email);
+                    cmd.Parameters.AddWithValue("password", agency.credential.password);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -45,8 +48,8 @@ namespace ProximityUploadEngine
                         {
                             agency.id = Convert.ToInt32(reader["id"]);
                             agency.name = reader["name"].ToString();
-                            agency.email = reader["email"].ToString();
-                            agency.password = reader["password"].ToString();
+                            agency.credential.email = reader["email"].ToString();
+                            agency.credential.password = reader["password"].ToString();
                         }
                         else
                         {
@@ -76,8 +79,8 @@ namespace ProximityUploadEngine
                         {
                             agency.id = Convert.ToInt32(reader["id"]);
                             agency.name = reader["name"].ToString();
-                            agency.email = reader["email"].ToString();
-                            agency.password = reader["password"].ToString();
+                            agency.credential.email = reader["email"].ToString();
+                            agency.credential.password = reader["password"].ToString();
                         }
                         else
                         {
@@ -103,15 +106,15 @@ namespace ProximityUploadEngine
                 {
                     while (reader.Read())
                     {
-                        var agency = new Agency
-                        {
-                            id = Convert.ToInt32(reader["id"]),
-                            name = reader["name"].ToString(),
-                            email = reader["email"].ToString(),
-                            password = reader["password"].ToString(),
-                        };
+                        //var agency = new Agency
+                        //{
+                        //    id = Convert.ToInt32(reader["id"]),
+                        //    name = reader["name"].ToString(),
+                        //    credential.email = reader["email"].ToString(),
+                        //    credential.password = reader["password"].ToString(),
+                        //};
 
-                        users.Add(agency);
+                        //users.Add(agency);
                     }
                 }
             }
@@ -190,8 +193,8 @@ namespace ProximityUploadEngine
                 {
                     cmd.Parameters.AddWithValue("id", agency.id);
                     cmd.Parameters.AddWithValue("name", agency.name);
-                    cmd.Parameters.AddWithValue("email", agency.email);
-                    cmd.Parameters.AddWithValue("password", agency.password);
+                    cmd.Parameters.AddWithValue("email", agency.credential.email);
+                    cmd.Parameters.AddWithValue("password", agency.credential.password);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -224,11 +227,11 @@ namespace ProximityUploadEngine
             }
         }
     }
-    public class Agency
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-    }
+    //public class Agency
+    //{
+    //    public int id { get; set; }
+    //    public string name { get; set; }
+    //    public string email { get; set; }
+    //    public string password { get; set; }
+    //}
 }
