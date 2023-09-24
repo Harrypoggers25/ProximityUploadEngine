@@ -11,7 +11,11 @@ namespace ProximityUploadEngine
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                rfv_title1.ControlToValidate = "tb_title1";
+                rfv_title1.ForeColor = System.Drawing.Color.Red;
+            }
         }
     }
 }

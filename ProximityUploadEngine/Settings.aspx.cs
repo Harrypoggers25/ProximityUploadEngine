@@ -11,7 +11,7 @@ namespace ProximityUploadEngine
             var agency = master.getAgencyFromSession();
             master.setLblUsername(agency.name);
 
-            tb_email.Text = agency.email;
+            tb_email.Text = agency.credential.email;
             lbl_username1.Text = agency.name;
 
             if (!IsPostBack)

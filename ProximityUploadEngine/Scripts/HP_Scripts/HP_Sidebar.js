@@ -96,7 +96,11 @@ class HP_Sidebar {
         this.#initialHeight = this.#wrapper.height() - this.#initialPositionY;
         this.#initialWidth = this.#sidebar.width();
         this.#maxHeight = window.innerHeight;
+        this.#currentPositionY = this.#initialPositionY;
+        
         //console.log("max height: ", this.#maxHeight);
+        //console.log("offset height: ");
+        //console.log("initial height: ", this.#initialHeight);
         this.#updateSidebarHeight();
         this.#updateSidebarWidth();
 
@@ -108,10 +112,10 @@ class HP_Sidebar {
         });
         this.#sidebar.hover(
             () => {
-                this.#hovered(true);
+                this.hovered(true);
             },
             () => {
-                this.#hovered(false);
+                this.hovered(false);
             }
         );
         this.#sidebar.on("wheel", (event) => {
@@ -144,19 +148,30 @@ class HP_Sidebar {
         //console.log(window.scrollY);
         //console.log(this.#initialPositionY);
         //console.log("dh", this.#initialHeight + window.scrollY);
-        if (this.#initialHeight + window.scrollY <= this.#maxHeight) {
-            if (window.scrollY <= this.#initialPositionY) {
-                //console.log("unfixed");
-                this.#wrapper.css({ "height": this.#initialHeight + window.scrollY, "position": "absolute", top: this.#initialPositionY });
-
-            }
+        if (window.scrollY <= this.#initialPositionY) {
+            //console.log("unfixed", this.#maxHeight);
+            this.#wrapper.css({ "height": this.#initialHeight + window.scrollY, "position": "absolute", top: this.#initialPositionY });
         }
         else {
-            this.#wrapper.css({ "height": "100vh", "position": "fixed", "top": 0 });
+            //console.log("fixed", this.#maxHeight);
+            this.#wrapper.css({ "height": this.#wrapper.height(), "position": "fixed", "top": 0 });
         }
+        //console.log("height: ", this.#wrapper.height());
+        //console.log("scroll: ", window.scrollY);
+        //console.log("------------------------------------------------------------------------");
         //console.log("height", this.#wrapper.height());
     }
-    #hovered(isHovered) {
+    #toggleSidebar(isToggled) {
+        if (!isToggled) {
+            this.#sidebar.hide();
+            this.#sidebar.css("width", 0);
+        }
+        else {
+            this.#sidebar.show();
+            this.#sidebar.css("width", this.#currentWidth);
+        }
+    }
+    hovered(isHovered) {
         if (isHovered) {
             this.#modal.css("opacity", 0.8);
             this.#currentWidth = 200;
@@ -180,16 +195,6 @@ class HP_Sidebar {
             else {
                 this.#sidebar.css("width", this.#currentWidth);
             }
-        }
-    }
-    #toggleSidebar(isToggled) {
-        if (!isToggled) {
-            this.#sidebar.hide();
-            this.#sidebar.css("width", 0);
-        }
-        else {
-            this.#sidebar.show();
-            this.#sidebar.css("width", this.#currentWidth);
         }
     }
 }

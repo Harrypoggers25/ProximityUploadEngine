@@ -10,7 +10,6 @@ namespace ProximityUploadEngine
             Session.Clear();
             var master = (SiteMaster)this.Master;
             master.toggleLoginHiddenElement(true);
-
         }
         protected void btnLogin_click(object sender, EventArgs e)
         {
