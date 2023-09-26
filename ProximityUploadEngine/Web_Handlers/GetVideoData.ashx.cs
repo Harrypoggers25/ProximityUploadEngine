@@ -12,6 +12,15 @@ namespace ProximityUploadEngine.Web_Handlers
     
     public class GetVideoData : IHttpHandler
     {
+        public class VideoData
+        {
+            public string FileName { get; set; }
+            public string FilePath { get; set; }
+            public string FileSize { get; set; }
+            public string FileType { get; set; }
+            public string VideoDuration { get; set; }
+            public string VideoResolution { get; set; }
+        }
         public void ProcessRequest(HttpContext context)
         {
             HttpPostedFile file = context.Request.Files["file"];
