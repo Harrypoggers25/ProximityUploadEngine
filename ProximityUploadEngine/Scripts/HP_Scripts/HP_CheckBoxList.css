@@ -1,0 +1,23 @@
+﻿.HP-CheckBoxList {
+    border: 2px solid black;
+    border-radius: 2px;
+    height: 200px;
+    overflow: auto scroll;
+}
+
+    .HP-CheckBoxList ul {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .HP-CheckBoxList li {
+        display: block;
+        margin: 3px;
+    }
+
+        .HP-CheckBoxList li:nth-of-type(2) {
+            flex-grow: 4;
+        }

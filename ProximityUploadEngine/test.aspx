@@ -92,11 +92,11 @@
                     <div id="slc_hotel5"></div>
 
                     <div class="col-12 d-flex flex-row mt-2">
-                        <asp:Button ID="Button21" runat="server" Text="Submit" CssClass="btn btn-primary col" OnClick="btnSubmit3_clicked" />
-                        <asp:Button ID="Button22" runat="server" Text="Retrieve" CssClass="btn btn-secondary col" OnClick="btnRetrieve3_clicked" />
-                        <asp:Button ID="Button23" runat="server" Text="Update" CssClass="btn btn-success col" OnClick="btnUpdate3_clicked" />
-                        <asp:Button ID="Button24" runat="server" Text="Delete All" CssClass="btn btn-danger col" OnClick="btnDeleteAll3_clicked" />
-                        <asp:Button ID="Button25" runat="server" Text="Delete" CssClass="btn btn-warning col" OnClick="btnDelete3_clicked" />
+                        <asp:Button ID="Button21" runat="server" Text="Submit" CssClass="btn btn-primary col" OnClick="btnSubmit5_clicked" />
+                        <asp:Button ID="Button22" runat="server" Text="Retrieve" CssClass="btn btn-secondary col" OnClick="btnRetrieve5_clicked" />
+                        <asp:Button ID="Button23" runat="server" Text="Update" CssClass="btn btn-success col" OnClick="btnUpdate5_clicked" />
+                        <asp:Button ID="Button24" runat="server" Text="Delete All" CssClass="btn btn-danger col" OnClick="btnDeleteAll5_clicked" />
+                        <asp:Button ID="Button25" runat="server" Text="Delete" CssClass="btn btn-warning col" OnClick="btnDelete5_clicked" />
                     </div>
                 </div>
             </div>

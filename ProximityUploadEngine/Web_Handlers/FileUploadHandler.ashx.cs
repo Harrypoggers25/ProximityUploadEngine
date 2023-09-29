@@ -1,10 +1,7 @@
-﻿using Microsoft.Ajax.Utilities;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Remoting.Contexts;
-using System.Text.Json.Serialization;
 using System.Web;
 
 namespace ProximityUploadEngine

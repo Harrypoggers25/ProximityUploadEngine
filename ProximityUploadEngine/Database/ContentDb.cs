@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.EnterpriseServices.Internal;
 using System.Linq;
 using System.Web;
 
@@ -19,6 +20,7 @@ namespace ProximityUploadEngine.Database
             using (var hpsql = new HPpgsql(connectionString1))
             {
                 hpsql.values["client_id"] = content.clientId;
+                hpsql.values["hotel_id"] = content.hotelId;
                 hpsql.values["title"] = content.title;
                 hpsql.values["path"] = content.path;
                 hpsql.values["description"] = content.description;
@@ -39,6 +41,7 @@ namespace ProximityUploadEngine.Database
 
                         content.id = hpsql.ToInt32(reader["id"]);
                         content.clientId = hpsql.ToInt32(reader["client_id"]);
+                        content.clientId = hpsql.ToInt32(reader["hotel_id"]);
                         content.title = hpsql.ToString(reader["title"]);
                         content.path = hpsql.ToString(reader["path"]);
                         content.description = hpsql.ToString(reader["description"]);
@@ -62,6 +65,7 @@ namespace ProximityUploadEngine.Database
                     {
                         content.id = hpsql.ToInt32(reader["id"]);
                         content.clientId = hpsql.ToInt32(reader["client_id"]);
+                        content.clientId = hpsql.ToInt32(reader["hotel_id"]);
                         content.title = hpsql.ToString(reader["title"]);
                         content.path = hpsql.ToString(reader["path"]);
                         content.description = hpsql.ToString(reader["description"]);
@@ -84,6 +88,7 @@ namespace ProximityUploadEngine.Database
             {
                 hpsql.values["id"] = content.id;
                 hpsql.values["client_id"] = content.clientId;
+                hpsql.values["hotel_id"] = content.clientId;
                 hpsql.values["title"] = content.title;
                 hpsql.values["path"] = content.path;
                 hpsql.values["description"] = content.description;
@@ -105,6 +110,30 @@ namespace ProximityUploadEngine.Database
                 hpsql.values["id"] = id;
 
                 hpsql.DeleteRow("tbl_contents", "id");
+                if (hpsql.CountRow("tbl_contents") == 0) hpsql.ResetSerial("tbl_contents", "id");
+            }
+        }
+        public void DeleteAllClientContent(int clientId)
+        {
+            using (var hpsql = new HPpgsql(connectionString1))
+            {
+                var contentIds = new List<int>();
+
+                hpsql.values["client_id"] = clientId;
+                using (var reader = hpsql.ReadCommand("SELECT id FROM tbl_contents WHERE client_id = @client_id"))
+                {
+                    while (reader.Read())
+                    {
+                        contentIds.Add(Convert.ToInt32(reader["id"]));
+                    }
+                }
+                hpsql.ClearValues();
+
+                foreach (var id in contentIds)
+                {
+                    hpsql.values["id"] = id;
+                    hpsql.DeleteRow("tbl_contents", "id");
+                }
                 if (hpsql.CountRow("tbl_contents") == 0) hpsql.ResetSerial("tbl_contents", "id");
             }
         }

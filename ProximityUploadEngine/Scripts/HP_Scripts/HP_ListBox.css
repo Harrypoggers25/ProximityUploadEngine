@@ -1,0 +1,21 @@
+﻿.HP-ListBox {
+    border: 2px solid black;
+    border-radius: 2px;
+    overflow-y: scroll;
+    /*overflow-x: hidden;*/
+    height: 200px;
+}
+
+    .HP-ListBox .HP-ListBox-Wrapper {
+        display: flex;
+    }
+
+    .HP-ListBox ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .HP-ListBox li {
+        overflow-wrap: break-word;
+    }

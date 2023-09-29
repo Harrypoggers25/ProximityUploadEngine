@@ -389,6 +389,8 @@ namespace ProximityUploadEngine
         }
         protected void btnDeleteAll5_clicked(object sender, EventArgs e)
         {
+            var contentDb = new ContentDb();
+            contentDb.DeleteAllContent();
         }
         protected void btnDelete5_clicked(object sender, EventArgs e)
         {
@@ -460,7 +462,7 @@ namespace ProximityUploadEngine
         public static string getAgencyAllClient(string email)
         {
             var agencyDb = new AgencyDb();
-            List<Client> clients = agencyDb.GetAllClient(email);
+            var clients = agencyDb.GetAllClient(email);
             return JsonConvert.SerializeObject(clients);
         }
         [WebMethod]

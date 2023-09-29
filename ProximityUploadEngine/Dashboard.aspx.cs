@@ -1,12 +1,10 @@
-﻿using ProximityUploadEngine.Database;
-using ProximityUploadEngine.Web_Handlers.Dashboard;
+﻿using Newtonsoft.Json;
+using ProximityUploadEngine.Database;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
+using System.Web.ModelBinding;
 using System.Web.Services;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace ProximityUploadEngine
 {
@@ -14,35 +12,36 @@ namespace ProximityUploadEngine
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            cbl_hotel.Items.Add("hotel1");
-            cbl_hotel.Items.Add("hotel2");
-            cbl_hotel.Items.Add("hotel3");
-            cbl_hotel.Items.Add("hotel4");
-            cbl_hotel.Items.Add("hotel5");
-            cbl_hotel.Items.Add("hotel6");
-            cbl_hotel.Items.Add("hotel7");
-            cbl_hotel.Items.Add("hotel8");
-            cbl_hotel.Items.Add("hotel9");
-            cbl_hotel.Items.Add("hotel10");
-            cbl_hotel.Items.Add("hotel11");
-            cbl_hotel.Items.Add("hotel12");
-            cbl_hotel.Items.Add("hotel13");
-            cbl_hotel.Items.Add("hotel14");
-            cbl_hotel.Items.Add("hotel15");
-
-            var videoDetails = new VideoDetails();
-            setVideoDetails(videoDetails);
+            //if (Session["agency_hotels"] != null)
+            //{
+            //    var hotels = JsonConvert.DeserializeObject<List<Hotel>>(Session["agency_hotels"].ToString());
+            //    cbl_hotel.Items.Clear();
+            //    foreach (var hotel in hotels)
+            //    {
+            //        cbl_hotel.Items.Add(hotel.name);
+            //    }
+            //}
         }
-        public void setVideoDetails(VideoDetails videoDetails)
+        [WebMethod]
+        public static string getAllAgency()
         {
-            lb_videoDetails.Items.Clear();
-            lb_videoDetails.Items.Add($"File Directory:      {videoDetails.filePath}/{videoDetails.fileName}");
-            lb_videoDetails.Items.Add($"File Size:           {videoDetails.fileSize}");
-            lb_videoDetails.Items.Add($"File Type:           {videoDetails.fileType}");
-            lb_videoDetails.Items.Add($"Video Duration:      {videoDetails.videoDuration}");
-            lb_videoDetails.Items.Add($"Video Resolution:    {videoDetails.videoResolution}");
-            lb_videoDetails.Items.Add($"Audio Format:        {videoDetails.audioFormat}");
-            lb_videoDetails.Items.Add($"Audio Channel:       {videoDetails.audioChannel}");
+            var agencyDb = new AgencyDb();
+            var agencies = agencyDb.GetAllAgency();
+            return JsonConvert.SerializeObject(agencies);
+        }
+        [WebMethod]
+        public static string getAgencyAllClient(string email)
+        {
+            var agencyDb = new AgencyDb();
+            var clients = agencyDb.GetAllClient(email);
+            return JsonConvert.SerializeObject(clients);
+        }
+        [WebMethod]
+        public static string getAllAgencyHotel(string email)
+        {
+            var agencyDb = new AgencyDb();
+
+            return JsonConvert.SerializeObject(agencyDb.GetAllHotel(email));
         }
     }
 }

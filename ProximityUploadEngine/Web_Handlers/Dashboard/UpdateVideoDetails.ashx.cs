@@ -3,36 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel;
+using ProximityUploadEngine.Database;
+using System.Runtime.InteropServices;
 
 namespace ProximityUploadEngine.Web_Handlers.Dashboard
 {
-    public class VideoDetails
-    {
-        public string fileName { get; set; }
-        public string filePath { get; set; }
-        public string fileSize { get; set; }
-        public string fileType { get; set; }
-        public string videoDuration { get; set; }
-        public string videoResolution { get; set; }
-        public string audioFormat { get; set; }
-        public string audioChannel { get; set; }
-        public VideoDetails()
-        {
-            init();
-        }
-        public void init()
-        {
-            fileName = "unknown";
-            filePath = "unknown";
-            fileSize = "unknown";
-            fileType = "unknown";
-            videoDuration = "unknown";
-            videoResolution = "unknown";
-            audioFormat = "unknown";
-            audioChannel = "unknown";
-        }
-    }
-    public class UpdateVideoDetails : IHttpHandler
+    /// <summary>
+    /// Summary description for UpdateVideoDetails
+    /// </summary>
+    ///  public class VideoDetails
+    public class UpdateVideoDetils : IHttpHandler
     {
         public void ProcessRequest(HttpContext context)
         {
@@ -43,11 +24,11 @@ namespace ProximityUploadEngine.Web_Handlers.Dashboard
                 var videoData = new VideoDetails
                 {
                     fileName = file.FileName,
-                    filePath = context.Server.MapPath(file.FileName),
+                    fileDir = context.Server.MapPath(file.FileName),
                     fileSize = ConvertSize(file.ContentLength),
                     fileType = file.ContentType,
+                    videoDuration = TimeSpan.FromSeconds(Math.Round(GetMediaDuration(context.Server.MapPath(file.FileName)))).ToString()
                 };
-
 
                 string jsonResult = JsonConvert.SerializeObject(videoData);
                 context.Response.ContentType = "application/json";
@@ -72,6 +53,22 @@ namespace ProximityUploadEngine.Web_Handlers.Dashboard
 
             return convertedResult;
         }
+        private double GetMediaDuration(string path)
+        {
+            try
+            {
+                var w = new WMPLib.WindowsMediaPlayer();
+                var m = w.newMedia(path);
+                w.close();
+
+                return m.duration;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+
         public bool IsReusable
         {
             get
@@ -81,3 +78,5 @@ namespace ProximityUploadEngine.Web_Handlers.Dashboard
         }
     }
 }
+
+

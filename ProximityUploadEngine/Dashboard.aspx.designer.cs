@@ -15,24 +15,6 @@ namespace ProximityUploadEngine
     {
 
         /// <summary>
-        /// cbl_hotel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBoxList cbl_hotel;
-
-        /// <summary>
-        /// lb_videoDetails control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox lb_videoDetails;
-
-        /// <summary>
         /// tb_title control.
         /// </summary>
         /// <remarks>
