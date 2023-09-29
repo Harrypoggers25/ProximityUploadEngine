@@ -45,6 +45,7 @@ namespace ProximityUploadEngine.Database
     {
         public int id { get; set; }
         public int clientId { get; set; }
+        public int hotelId { get; set; }
         public string title { get; set; }
         public string path { get; set; }
         public string description { get; set; }
@@ -60,5 +61,33 @@ namespace ProximityUploadEngine.Database
         public string profilePicture { get; set; }
         public string description { get; set; }
         public string location { get; set; }
+    }
+
+    // Non-Database Related Models
+    public class VideoDetails
+    {
+        public string fileName { get; set; }
+        public string fileDir { get; set; }
+        public string fileSize { get; set; }
+        public string fileType { get; set; }
+        public string videoDuration { get; set; }
+        public string videoResolution { get; set; }
+        public string audioFormat { get; set; }
+        public string audioChannel { get; set; }
+        public VideoDetails()
+        {
+            init();
+        }
+        public void init()
+        {
+            fileName = "unknown";
+            fileDir = "unknown";
+            fileSize = "unknown";
+            fileType = "unknown";
+            videoDuration = "unknown";
+            videoResolution = "unknown";
+            audioFormat = "unknown";
+            audioChannel = "unknown";
+        }
     }
 }
